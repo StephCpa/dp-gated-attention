@@ -1,0 +1,9 @@
+# Core
+torch>=2.1
+transformers>=4.38
+datasets>=2.14
+opacus>=1.4
+
+# Utils
+numpy>=1.23
+matplotlib>=3.7
