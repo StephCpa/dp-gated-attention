@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import math
 import random
 import types
 import sys
@@ -67,13 +68,26 @@ class TokenizedTextDataset(torch.utils.data.Dataset):
         return input_ids, labels, attention_mask.squeeze(0)
 
 
-def build_real_dataloader(args, tokenizer):
+def build_real_dataloader(
+    args,
+    tokenizer,
+    *,
+    dataset_split=None,
+    batch_size=None,
+    shuffle=None,
+    max_samples=None,
+):
     from datasets import load_dataset
 
-    dataset = load_dataset(args.dataset, args.dataset_config, split=args.dataset_split)
-    if args.max_samples and args.max_samples > 0:
-        dataset = dataset.select(range(args.max_samples))
-    if args.shuffle:
+    split = args.dataset_split if dataset_split is None else dataset_split
+    batch_size = args.batch_size if batch_size is None else batch_size
+    shuffle = args.shuffle if shuffle is None else shuffle
+    max_samples = args.max_samples if max_samples is None else max_samples
+
+    dataset = load_dataset(args.dataset, args.dataset_config, split=split)
+    if max_samples and max_samples > 0:
+        dataset = dataset.select(range(max_samples))
+    if shuffle:
         dataset = dataset.shuffle(seed=args.seed)
 
     tokenized_dataset = TokenizedTextDataset(dataset, tokenizer, args.text_field, args.seq_len)
@@ -95,8 +109,8 @@ def build_real_dataloader(args, tokenizer):
 
     return DataLoader(
         tokenized_dataset,
-        batch_size=args.batch_size,
-        shuffle=args.shuffle,
+        batch_size=batch_size,
+        shuffle=shuffle,
         collate_fn=collate,
     )
 
@@ -127,6 +141,33 @@ def normalize_batch(batch):
 def batch_to_device(batch, device):
     batch = normalize_batch(batch)
     return {k: v.to(device) for k, v in batch.items()}
+
+
+def evaluate(model, data_loader, device, max_steps):
+    if data_loader is None:
+        return None, None
+    was_training = model.training
+    model.eval()
+    losses = []
+    with torch.no_grad():
+        for idx, batch in enumerate(data_loader):
+            if max_steps and idx >= max_steps:
+                break
+            batch = batch_to_device(batch, device)
+            if batch["input_ids"].size(0) == 0:
+                continue
+            outputs = model(**batch, use_cache=False)
+            losses.append(outputs.loss.item())
+    if was_training:
+        model.train()
+    if not losses:
+        return None, None
+    avg_loss = sum(losses) / len(losses)
+    try:
+        ppl = math.exp(avg_loss)
+    except OverflowError:
+        ppl = float("inf")
+    return avg_loss, ppl
 
 
 def per_sample_grads(model, batch):
@@ -234,6 +275,11 @@ def main():
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--print-every", type=int, default=1)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--eval-every", type=int, default=20)
+    parser.add_argument("--eval-steps", type=int, default=5)
+    parser.add_argument("--eval-batch-size", type=int, default=None)
+    parser.add_argument("--eval-dataset-split", type=str, default="validation")
+    parser.add_argument("--eval-max-samples", type=int, default=0)
     parser.add_argument("--use-opacus", action="store_true")
     parser.add_argument("--delta", type=float, default=1e-5)
     parser.add_argument("--sample-rate", type=float, default=None)
@@ -254,10 +300,26 @@ def main():
         tokenizer = None
         vocab_size = args.vocab_size
         data_loader = None
+        eval_loader = None
     else:
         tokenizer = build_tokenizer(args.tokenizer, args.seq_len)
         vocab_size = len(tokenizer)
         data_loader = build_real_dataloader(args, tokenizer)
+        eval_loader = None
+        if args.eval_every and args.eval_every > 0:
+            eval_batch_size = args.eval_batch_size or args.batch_size
+            try:
+                eval_loader = build_real_dataloader(
+                    args,
+                    tokenizer,
+                    dataset_split=args.eval_dataset_split,
+                    batch_size=eval_batch_size,
+                    shuffle=False,
+                    max_samples=args.eval_max_samples,
+                )
+            except Exception as exc:
+                print(f"warning: failed to build eval dataloader: {exc}")
+                eval_loader = None
 
     model = build_model(
         vocab_size=vocab_size,
@@ -300,6 +362,14 @@ def main():
             step += 1
             if step % args.print_every == 0:
                 print(f"step={step:03d} loss={loss.item():.4f}")
+            if eval_loader is not None and args.eval_every and step % args.eval_every == 0:
+                eval_loss, eval_ppl = evaluate(
+                    model, eval_loader, args.device, args.eval_steps
+                )
+                if eval_loss is not None:
+                    print(
+                        f"eval_step={step:03d} eval_loss={eval_loss:.4f} eval_ppl={eval_ppl:.2f}"
+                    )
             if step >= args.steps:
                 break
 
@@ -343,6 +413,14 @@ def main():
 
         if step % args.print_every == 0:
             print(f"step={step:03d} loss={loss:.4f}")
+        if eval_loader is not None and args.eval_every and step % args.eval_every == 0:
+            eval_loss, eval_ppl = evaluate(
+                model, eval_loader, args.device, args.eval_steps
+            )
+            if eval_loss is not None:
+                print(
+                    f"eval_step={step:03d} eval_loss={eval_loss:.4f} eval_ppl={eval_ppl:.2f}"
+                )
 
     epsilon = estimate_epsilon_rdp(
         steps=args.steps,
