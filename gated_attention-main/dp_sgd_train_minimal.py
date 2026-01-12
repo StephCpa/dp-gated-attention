@@ -10,13 +10,17 @@ import torch
 from torch.utils.data import DataLoader
 
 
-def _load_gated_attention_modules():
+def _ensure_gated_attention_package():
     repo_dir = Path(__file__).resolve().parent
     pkg_name = "gated_attention"
     if pkg_name not in sys.modules:
         pkg = types.ModuleType(pkg_name)
         pkg.__path__ = [str(repo_dir)]
         sys.modules[pkg_name] = pkg
+
+
+def _load_gated_attention_modules():
+    _ensure_gated_attention_package()
 
     from gated_attention.configuration_qwen3 import Qwen3Config  # type: ignore
     from gated_attention.modeling_qwen3 import Qwen3ForCausalLM  # type: ignore
@@ -236,6 +240,7 @@ def build_model(
     num_heads,
     head_dim,
     max_position_embeddings,
+    gate_type,
 ):
     Qwen3Config, Qwen3ForCausalLM = _load_gated_attention_modules()
 
@@ -250,16 +255,36 @@ def build_model(
         max_position_embeddings=max_position_embeddings,
         use_qk_norm=False,
         attention_dropout=0.0,
-        headwise_attn_output_gate=True,
-        elementwise_attn_output_gate=False,
+        headwise_attn_output_gate=gate_type == "headwise",
+        elementwise_attn_output_gate=gate_type == "elementwise",
     )
     if not hasattr(config, "qkv_bias"):
         config.qkv_bias = False
     return Qwen3ForCausalLM(config)
 
 
+def build_gpt2_model(args):
+    from transformers import AutoConfig, AutoModelForCausalLM
+    _ensure_gated_attention_package()
+    from gated_attention.modeling_gpt2_gated import apply_gpt2_gated_attention
+
+    if not args.hf_model:
+        raise ValueError("GPT2 mode requires --hf-model pointing to a local or HF model name/path.")
+
+    config = AutoConfig.from_pretrained(args.hf_model)
+    config.headwise_attn_output_gate = args.gate_type == "headwise"
+    config.elementwise_attn_output_gate = args.gate_type == "elementwise"
+
+    model = AutoModelForCausalLM.from_pretrained(args.hf_model, config=config)
+    model = apply_gpt2_gated_attention(model, gate_type=args.gate_type)
+    return model
+
+
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model", type=str, default="qwen3-minimal", choices=["qwen3-minimal", "gpt2"])
+    parser.add_argument("--hf-model", type=str, default=None)
+    parser.add_argument("--gate-type", type=str, default="headwise", choices=["headwise", "elementwise", "none"])
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--seq-len", type=int, default=128)
@@ -321,15 +346,20 @@ def main():
                 print(f"warning: failed to build eval dataloader: {exc}")
                 eval_loader = None
 
-    model = build_model(
-        vocab_size=vocab_size,
-        hidden_size=args.hidden_size,
-        intermediate_size=args.intermediate_size,
-        num_layers=args.num_layers,
-        num_heads=args.num_heads,
-        head_dim=args.head_dim,
-        max_position_embeddings=args.seq_len,
-    ).to(args.device)
+    if args.model == "gpt2":
+        model = build_gpt2_model(args).to(args.device)
+        vocab_size = getattr(model.config, "vocab_size", vocab_size)
+    else:
+        model = build_model(
+            vocab_size=vocab_size,
+            hidden_size=args.hidden_size,
+            intermediate_size=args.intermediate_size,
+            num_layers=args.num_layers,
+            num_heads=args.num_heads,
+            head_dim=args.head_dim,
+            max_position_embeddings=args.seq_len,
+            gate_type=args.gate_type,
+        ).to(args.device)
 
     model.train()
 
