@@ -3,7 +3,16 @@ from typing import Optional
 import torch
 import torch.nn as nn
 from transformers.models.gpt2 import modeling_gpt2 as gpt2
-from transformers.utils import deprecate_kwarg
+try:
+    from transformers.utils import deprecate_kwarg
+except ImportError:
+    def deprecate_kwarg(*_args, **_kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
+
+ENCODER_DECODER_CACHE = getattr(gpt2, "EncoderDecoderCache", None)
 
 
 class GatedGPT2Attention(gpt2.GPT2Attention):
@@ -25,7 +34,7 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
     def forward(
         self,
         hidden_states,
-        past_key_values: Optional[gpt2.Cache] = None,
+        past_key_values=None,
         cache_position: Optional[torch.LongTensor] = None,
         attention_mask: Optional[torch.FloatTensor] = None,
         head_mask: Optional[torch.FloatTensor] = None,
@@ -34,6 +43,9 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
         output_attentions: Optional[bool] = False,
         **kwargs,
     ):
+        if past_key_values is None and "layer_past" in kwargs:
+            past_key_values = kwargs.pop("layer_past")
+
         if self.gate_proj is None:
             return super().forward(
                 hidden_states,
@@ -49,7 +61,7 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
 
         is_cross_attention = encoder_hidden_states is not None
         if past_key_values is not None:
-            if isinstance(past_key_values, gpt2.EncoderDecoderCache):
+            if ENCODER_DECODER_CACHE is not None and isinstance(past_key_values, ENCODER_DECODER_CACHE):
                 is_updated = past_key_values.is_updated.get(self.layer_idx)
                 if is_cross_attention:
                     curr_past_key_value = past_key_values.cross_attention_cache
@@ -87,12 +99,13 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
         if (past_key_values is not None and not is_cross_attention) or (
             past_key_values is not None and is_cross_attention and not is_updated
         ):
-            cache_position = cache_position if not is_cross_attention else None
-            key_states, value_states = curr_past_key_value.update(
-                key_states, value_states, self.layer_idx, {"cache_position": cache_position}
-            )
-            if is_cross_attention:
-                past_key_values.is_updated[self.layer_idx] = True
+            if hasattr(curr_past_key_value, "update"):
+                cache_position = cache_position if not is_cross_attention else None
+                key_states, value_states = curr_past_key_value.update(
+                    key_states, value_states, self.layer_idx, {"cache_position": cache_position}
+                )
+                if is_cross_attention and ENCODER_DECODER_CACHE is not None:
+                    past_key_values.is_updated[self.layer_idx] = True
 
         is_causal = attention_mask is None and query_states.shape[-2] > 1 and not is_cross_attention
 
