@@ -36,6 +36,37 @@ def build_tokenizer(name_or_path, seq_len):
     return tokenizer
 
 
+class TokenizedTextDataset(torch.utils.data.Dataset):
+    def __init__(self, dataset, tokenizer, text_field, seq_len):
+        self.dataset = dataset
+        self.tokenizer = tokenizer
+        self.text_field = text_field
+        self.seq_len = seq_len
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        sample = self.dataset[idx]
+        text = sample.get(self.text_field, "")
+        if not isinstance(text, str) or not text.strip():
+            text = "[EMPTY]"
+        enc = self.tokenizer(
+            text,
+            return_tensors="pt",
+            padding="max_length",
+            truncation=True,
+            max_length=self.seq_len,
+            return_attention_mask=True,
+        )
+        input_ids = enc["input_ids"].squeeze(0)
+        labels = input_ids.clone()
+        attention_mask = enc.get("attention_mask")
+        if attention_mask is None:
+            return input_ids, labels
+        return input_ids, labels, attention_mask.squeeze(0)
+
+
 def build_real_dataloader(args, tokenizer):
     from datasets import load_dataset
 
@@ -45,24 +76,29 @@ def build_real_dataloader(args, tokenizer):
     if args.shuffle:
         dataset = dataset.shuffle(seed=args.seed)
 
-    def collate(examples):
-        texts = [ex.get(args.text_field, "") for ex in examples]
-        texts = [t for t in texts if isinstance(t, str) and t.strip()]
-        if not texts:
-            texts = ["[EMPTY]"]
-        enc = tokenizer(
-            texts,
-            return_tensors="pt",
-            padding="max_length",
-            truncation=True,
-            max_length=args.seq_len,
-        )
-        batch = {"input_ids": enc["input_ids"], "labels": enc["input_ids"].clone()}
-        if "attention_mask" in enc:
-            batch["attention_mask"] = enc["attention_mask"]
-        return batch
+    tokenized_dataset = TokenizedTextDataset(dataset, tokenizer, args.text_field, args.seq_len)
 
-    return DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle, collate_fn=collate)
+    def collate(examples):
+        if len(examples[0]) == 2:
+            input_ids, labels = zip(*examples)
+            batch = {
+                "input_ids": torch.stack(input_ids, dim=0),
+                "labels": torch.stack(labels, dim=0),
+            }
+            return batch
+        input_ids, labels, attention_mask = zip(*examples)
+        return {
+            "input_ids": torch.stack(input_ids, dim=0),
+            "labels": torch.stack(labels, dim=0),
+            "attention_mask": torch.stack(attention_mask, dim=0),
+        }
+
+    return DataLoader(
+        tokenized_dataset,
+        batch_size=args.batch_size,
+        shuffle=args.shuffle,
+        collate_fn=collate,
+    )
 
 
 def make_synthetic_batch(batch_size, seq_len, vocab_size, device):
@@ -71,7 +107,25 @@ def make_synthetic_batch(batch_size, seq_len, vocab_size, device):
     return {"input_ids": input_ids, "labels": labels}
 
 
+def normalize_batch(batch):
+    if isinstance(batch, dict):
+        return batch
+    if isinstance(batch, (list, tuple)):
+        if len(batch) == 2:
+            input_ids, labels = batch
+            return {"input_ids": input_ids, "labels": labels}
+        if len(batch) == 3:
+            input_ids, labels, attention_mask = batch
+            return {
+                "input_ids": input_ids,
+                "labels": labels,
+                "attention_mask": attention_mask,
+            }
+    raise TypeError(f"Unsupported batch type: {type(batch)}")
+
+
 def batch_to_device(batch, device):
+    batch = normalize_batch(batch)
     return {k: v.to(device) for k, v in batch.items()}
 
 
@@ -236,6 +290,8 @@ def main():
         step = 0
         for batch in data_loader:
             batch = batch_to_device(batch, args.device)
+            if batch["input_ids"].size(0) == 0:
+                continue
             outputs = model(**batch, use_cache=False)
             loss = outputs.loss
             loss.backward()
