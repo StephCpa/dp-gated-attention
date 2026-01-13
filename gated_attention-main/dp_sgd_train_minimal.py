@@ -80,6 +80,7 @@ def build_real_dataloader(
     batch_size=None,
     shuffle=None,
     max_samples=None,
+    add_position_ids=False,
 ):
     from datasets import load_dataset
 
@@ -103,13 +104,20 @@ def build_real_dataloader(
                 "input_ids": torch.stack(input_ids, dim=0),
                 "labels": torch.stack(labels, dim=0),
             }
+            if add_position_ids:
+                seq_len = batch["input_ids"].size(1)
+                batch["position_ids"] = torch.arange(seq_len).unsqueeze(0).expand(batch["input_ids"].size(0), -1)
             return batch
         input_ids, labels, attention_mask = zip(*examples)
-        return {
+        batch = {
             "input_ids": torch.stack(input_ids, dim=0),
             "labels": torch.stack(labels, dim=0),
             "attention_mask": torch.stack(attention_mask, dim=0),
         }
+        if add_position_ids:
+            seq_len = batch["input_ids"].size(1)
+            batch["position_ids"] = torch.arange(seq_len).unsqueeze(0).expand(batch["input_ids"].size(0), -1)
+        return batch
 
     return DataLoader(
         tokenized_dataset,
@@ -119,10 +127,13 @@ def build_real_dataloader(
     )
 
 
-def make_synthetic_batch(batch_size, seq_len, vocab_size, device):
+def make_synthetic_batch(batch_size, seq_len, vocab_size, device, add_position_ids=False):
     input_ids = torch.randint(0, vocab_size, (batch_size, seq_len), device=device)
     labels = input_ids.clone()
-    return {"input_ids": input_ids, "labels": labels}
+    batch = {"input_ids": input_ids, "labels": labels}
+    if add_position_ids:
+        batch["position_ids"] = torch.arange(seq_len, device=device).unsqueeze(0).expand(batch_size, -1)
+    return batch
 
 
 def normalize_batch(batch):
@@ -324,6 +335,8 @@ def main():
     torch.manual_seed(args.seed)
     random.seed(args.seed)
 
+    add_position_ids = args.model == "gpt2"
+
     if args.no_dataset:
         tokenizer = None
         vocab_size = args.vocab_size
@@ -332,7 +345,7 @@ def main():
     else:
         tokenizer = build_tokenizer(args.tokenizer, args.seq_len)
         vocab_size = len(tokenizer)
-        data_loader = build_real_dataloader(args, tokenizer)
+        data_loader = build_real_dataloader(args, tokenizer, add_position_ids=add_position_ids)
         eval_loader = None
         if args.eval_every and args.eval_every > 0:
             eval_batch_size = args.eval_batch_size or args.batch_size
@@ -344,6 +357,7 @@ def main():
                     batch_size=eval_batch_size,
                     shuffle=False,
                     max_samples=args.eval_max_samples,
+                    add_position_ids=add_position_ids,
                 )
             except Exception as exc:
                 print(f"warning: failed to build eval dataloader: {exc}")
@@ -430,7 +444,9 @@ def main():
 
     for step in range(1, args.steps + 1):
         if data_iter is None:
-            batch = make_synthetic_batch(args.batch_size, args.seq_len, vocab_size, args.device)
+            batch = make_synthetic_batch(
+                args.batch_size, args.seq_len, vocab_size, args.device, add_position_ids=add_position_ids
+            )
         else:
             batch = next(data_iter)
             batch = batch_to_device(batch, args.device)
