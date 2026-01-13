@@ -5,6 +5,7 @@ import random
 import types
 import sys
 from pathlib import Path
+from contextlib import nullcontext
 
 import torch
 from torch.utils.data import DataLoader
@@ -320,6 +321,7 @@ def main():
     parser.add_argument("--poisson-sampling", action="store_true", default=True)
     parser.add_argument("--no-poisson-sampling", action="store_false", dest="poisson_sampling")
     parser.add_argument("--grad-sample-mode", type=str, default="hooks", choices=["hooks", "functorch"])
+    parser.add_argument("--max-physical-batch-size", type=int, default=0)
     parser.add_argument("--delta", type=float, default=1e-5)
     parser.add_argument("--sample-rate", type=float, default=None)
     parser.add_argument("--no-dataset", action="store_true")
@@ -398,29 +400,41 @@ def main():
             grad_sample_mode=args.grad_sample_mode,
         )
 
+        if args.max_physical_batch_size and args.max_physical_batch_size > 0:
+            from opacus.utils.batch_memory_manager import BatchMemoryManager
+
+            loader_ctx = BatchMemoryManager(
+                data_loader=data_loader,
+                max_physical_batch_size=args.max_physical_batch_size,
+                optimizer=optimizer,
+            )
+        else:
+            loader_ctx = nullcontext(data_loader)
+
         step = 0
-        for batch in data_loader:
-            batch = batch_to_device(batch, args.device)
-            if batch["input_ids"].size(0) == 0:
-                continue
-            outputs = model(**batch, use_cache=False)
-            loss = outputs.loss
-            loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
-            step += 1
-            if step % args.print_every == 0:
-                print(f"step={step:03d} loss={loss.item():.4f}")
-            if eval_loader is not None and args.eval_every and step % args.eval_every == 0:
-                eval_loss, eval_ppl = evaluate(
-                    model, eval_loader, args.device, args.eval_steps
-                )
-                if eval_loss is not None:
-                    print(
-                        f"eval_step={step:03d} eval_loss={eval_loss:.4f} eval_ppl={eval_ppl:.2f}"
+        with loader_ctx as dp_loader:
+            for batch in dp_loader:
+                batch = batch_to_device(batch, args.device)
+                if batch["input_ids"].size(0) == 0:
+                    continue
+                outputs = model(**batch, use_cache=False)
+                loss = outputs.loss
+                loss.backward()
+                optimizer.step()
+                optimizer.zero_grad()
+                step += 1
+                if step % args.print_every == 0:
+                    print(f"step={step:03d} loss={loss.item():.4f}")
+                if eval_loader is not None and args.eval_every and step % args.eval_every == 0:
+                    eval_loss, eval_ppl = evaluate(
+                        model, eval_loader, args.device, args.eval_steps
                     )
-            if step >= args.steps:
-                break
+                    if eval_loss is not None:
+                        print(
+                            f"eval_step={step:03d} eval_loss={eval_loss:.4f} eval_ppl={eval_ppl:.2f}"
+                        )
+                if step >= args.steps:
+                    break
 
         epsilon = privacy_engine.get_epsilon(delta=args.delta)
         print(f"epsilon_rdp(opacus)={epsilon:.3f} delta={args.delta}")
