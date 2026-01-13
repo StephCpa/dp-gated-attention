@@ -306,6 +306,9 @@ def main():
     parser.add_argument("--eval-dataset-split", type=str, default="validation")
     parser.add_argument("--eval-max-samples", type=int, default=0)
     parser.add_argument("--use-opacus", action="store_true")
+    parser.add_argument("--poisson-sampling", action="store_true", default=True)
+    parser.add_argument("--no-poisson-sampling", action="store_false", dest="poisson_sampling")
+    parser.add_argument("--grad-sample-mode", type=str, default="hooks", choices=["hooks", "functorch"])
     parser.add_argument("--delta", type=float, default=1e-5)
     parser.add_argument("--sample-rate", type=float, default=None)
     parser.add_argument("--no-dataset", action="store_true")
@@ -377,6 +380,8 @@ def main():
             data_loader=data_loader,
             noise_multiplier=args.noise_multiplier,
             max_grad_norm=args.clip_norm,
+            poisson_sampling=args.poisson_sampling,
+            grad_sample_mode=args.grad_sample_mode,
         )
 
         step = 0

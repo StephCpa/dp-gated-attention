@@ -3,6 +3,7 @@ from typing import Optional
 import torch
 import torch.nn as nn
 from transformers.models.gpt2 import modeling_gpt2 as gpt2
+from transformers.pytorch_utils import Conv1D
 try:
     from transformers.utils import deprecate_kwarg
 except ImportError:
@@ -13,6 +14,21 @@ except ImportError:
 
 
 ENCODER_DECODER_CACHE = getattr(gpt2, "EncoderDecoderCache", None)
+
+try:
+    from opacus.grad_sample import register_grad_sampler
+
+    @register_grad_sampler(Conv1D)
+    def _conv1d_grad_sampler(layer, activations, backprops):
+        activations = activations[0]
+        ret = {}
+        if layer.weight.requires_grad:
+            ret[layer.weight] = torch.einsum("n...i,n...j->nij", activations, backprops)
+        if layer.bias is not None and layer.bias.requires_grad:
+            ret[layer.bias] = torch.einsum("n...j->nj", backprops)
+        return ret
+except Exception:
+    pass
 
 
 class GatedGPT2Attention(gpt2.GPT2Attention):
