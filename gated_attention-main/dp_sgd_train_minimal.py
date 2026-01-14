@@ -70,7 +70,10 @@ class TokenizedTextDataset(torch.utils.data.Dataset):
         attention_mask = enc.get("attention_mask")
         if attention_mask is None:
             return input_ids, labels
-        return input_ids, labels, attention_mask.squeeze(0)
+        attention_mask = attention_mask.squeeze(0)
+        # Ignore padding positions in the loss to keep PPL meaningful.
+        labels = labels.masked_fill(attention_mask == 0, -100)
+        return input_ids, labels, attention_mask
 
 
 def build_real_dataloader(
