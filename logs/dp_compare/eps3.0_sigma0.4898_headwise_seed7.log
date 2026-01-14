@@ -1,0 +1,41 @@
+/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+step=001 loss=3.9448
+step=002 loss=3.3530
+step=003 loss=4.5858
+step=004 loss=3.5205
+step=005 loss=3.8060
+step=006 loss=5.0586
+step=007 loss=3.9274
+step=008 loss=7.1685
+step=009 loss=5.1700
+step=010 loss=3.5814
+step=011 loss=3.4799
+step=012 loss=4.9356
+step=013 loss=5.8096
+step=014 loss=5.9448
+step=015 loss=4.1322
+step=016 loss=5.0863
+step=017 loss=5.4904
+step=018 loss=6.4954
+step=019 loss=5.3894
+step=020 loss=4.1285
+step=021 loss=3.8510
+step=022 loss=4.0480
+step=023 loss=4.0549
+step=024 loss=6.3111
+step=025 loss=4.0190
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 503, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 425, in main
+    loss.backward()
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/_tensor.py", line 581, in backward
+    torch.autograd.backward(
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/autograd/graph.py", line 825, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

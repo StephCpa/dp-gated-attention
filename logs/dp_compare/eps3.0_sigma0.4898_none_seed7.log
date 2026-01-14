@@ -1,0 +1,35 @@
+/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+step=001 loss=4.1161
+step=002 loss=3.9569
+step=003 loss=3.3027
+step=004 loss=4.7130
+step=005 loss=3.4690
+step=006 loss=3.3986
+step=007 loss=4.4515
+step=008 loss=3.7055
+step=009 loss=5.4965
+step=010 loss=3.6483
+step=011 loss=4.2162
+step=012 loss=3.1130
+step=013 loss=3.6574
+step=014 loss=3.4294
+step=015 loss=2.6526
+step=016 loss=3.4279
+step=017 loss=3.5027
+step=018 loss=5.5641
+step=019 loss=6.1831
+step=020 loss=3.4244
+step=021 loss=3.4634
+step=022 loss=4.0966
+step=023 loss=3.4352
+step=024 loss=3.4787
+step=025 loss=4.9306
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 503, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 430, in main
+    print(f"step={step:03d} loss={loss.item():.4f}")
+                                  ^^^^^^^^^^^
+KeyboardInterrupt
