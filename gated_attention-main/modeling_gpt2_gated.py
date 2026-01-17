@@ -32,19 +32,40 @@ except Exception:
 
 
 class GatedGPT2Attention(gpt2.GPT2Attention):
-    def __init__(self, config, is_cross_attention=False, layer_idx=None):
+    def __init__(self, config, is_cross_attention=False, layer_idx=None, gate_type="headwise"):
         super().__init__(config, is_cross_attention=is_cross_attention, layer_idx=layer_idx)
-        self.headwise_attn_output_gate = getattr(config, "headwise_attn_output_gate", False)
-        self.elementwise_attn_output_gate = getattr(config, "elementwise_attn_output_gate", False)
-        if self.headwise_attn_output_gate and self.elementwise_attn_output_gate:
-            raise ValueError("Choose only one gating type: headwise or elementwise.")
+        if gate_type not in {"headwise", "elementwise", "none"}:
+            raise ValueError("gate_type must be one of: headwise, elementwise, none")
+        self.gate_type = gate_type
+        self._gate_dim = 0
+        if gate_type == "headwise":
+            self._gate_dim = self.num_heads
+        elif gate_type == "elementwise":
+            self._gate_dim = self.embed_dim
+        self._fused_gate = self._gate_dim > 0 and not is_cross_attention
+        if self._fused_gate:
+            self.c_attn = Conv1D(3 * self.embed_dim + self._gate_dim, self.embed_dim)
 
-        if self.headwise_attn_output_gate:
-            self.gate_proj = nn.Linear(self.embed_dim, self.num_heads, bias=False)
-        elif self.elementwise_attn_output_gate:
-            self.gate_proj = nn.Linear(self.embed_dim, self.embed_dim, bias=False)
-        else:
-            self.gate_proj = None
+    def init_fused_c_attn(self, base_attn):
+        if not self._fused_gate:
+            return
+        if not hasattr(base_attn, "c_attn"):
+            raise ValueError("base_attn must have c_attn to initialize fused gating.")
+        if base_attn.c_attn.weight.shape[1] != 3 * self.embed_dim:
+            raise ValueError("base_attn.c_attn has unexpected shape; cannot init fused gate.")
+        q_end = self.embed_dim
+        gate_end = self.embed_dim + self._gate_dim
+        k_end = gate_end + self.embed_dim
+        v_end = k_end + self.embed_dim
+        with torch.no_grad():
+            self.c_attn.weight.zero_()
+            self.c_attn.bias.zero_()
+            self.c_attn.weight[:, :q_end] = base_attn.c_attn.weight[:, :q_end]
+            self.c_attn.bias[:q_end] = base_attn.c_attn.bias[:q_end]
+            self.c_attn.weight[:, gate_end:k_end] = base_attn.c_attn.weight[:, q_end : q_end + self.embed_dim]
+            self.c_attn.bias[gate_end:k_end] = base_attn.c_attn.bias[q_end : q_end + self.embed_dim]
+            self.c_attn.weight[:, k_end:v_end] = base_attn.c_attn.weight[:, q_end + self.embed_dim : q_end + 2 * self.embed_dim]
+            self.c_attn.bias[k_end:v_end] = base_attn.c_attn.bias[q_end + self.embed_dim : q_end + 2 * self.embed_dim]
 
     @deprecate_kwarg("past_key_value", new_name="past_key_values", version="4.58")
     def forward(
@@ -62,7 +83,7 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
         if past_key_values is None and "layer_past" in kwargs:
             past_key_values = kwargs.pop("layer_past")
 
-        if self.gate_proj is None:
+        if self.gate_type == "none":
             return super().forward(
                 hidden_states,
                 past_key_values=past_key_values,
@@ -76,6 +97,18 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
             )
 
         is_cross_attention = encoder_hidden_states is not None
+        if is_cross_attention:
+            return super().forward(
+                hidden_states,
+                past_key_values=past_key_values,
+                cache_position=cache_position,
+                attention_mask=attention_mask,
+                head_mask=head_mask,
+                encoder_hidden_states=encoder_hidden_states,
+                encoder_attention_mask=encoder_attention_mask,
+                output_attentions=output_attentions,
+                **kwargs,
+            )
         if past_key_values is not None:
             if ENCODER_DECODER_CACHE is not None and isinstance(past_key_values, ENCODER_DECODER_CACHE):
                 is_updated = past_key_values.is_updated.get(self.layer_idx)
@@ -86,29 +119,16 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
             else:
                 curr_past_key_value = past_key_values
 
-        if is_cross_attention:
-            if not hasattr(self, "q_attn"):
-                raise ValueError(
-                    "If class is used as cross attention, the weights `q_attn` have to be defined. "
-                    "Please make sure to instantiate class with `GPT2Attention(..., is_cross_attention=True)`."
-                )
-            query_states = self.q_attn(hidden_states)
-            attention_mask = encoder_attention_mask
+        if not self._fused_gate:
+            raise ValueError("Fused gating requested but c_attn was not expanded.")
 
-            if past_key_values is not None and is_updated:
-                key_states = curr_past_key_value.layers[self.layer_idx].keys
-                value_states = curr_past_key_value.layers[self.layer_idx].values
-            else:
-                key_states, value_states = self.c_attn(encoder_hidden_states).split(self.split_size, dim=2)
-                shape_kv = (*key_states.shape[:-1], -1, self.head_dim)
-                key_states = key_states.view(shape_kv).transpose(1, 2)
-                value_states = value_states.view(shape_kv).transpose(1, 2)
-        else:
-            query_states, key_states, value_states = self.c_attn(hidden_states).split(self.split_size, dim=2)
-            shape_kv = (*key_states.shape[:-1], -1, self.head_dim)
-            key_states = key_states.view(shape_kv).transpose(1, 2)
-            value_states = value_states.view(shape_kv).transpose(1, 2)
-
+        fused = self.c_attn(hidden_states)
+        query_states, gate_score, key_states, value_states = fused.split(
+            [self.embed_dim, self._gate_dim, self.embed_dim, self.embed_dim], dim=2
+        )
+        shape_kv = (*key_states.shape[:-1], -1, self.head_dim)
+        key_states = key_states.view(shape_kv).transpose(1, 2)
+        value_states = value_states.view(shape_kv).transpose(1, 2)
         shape_q = (*query_states.shape[:-1], -1, self.head_dim)
         query_states = query_states.view(shape_q).transpose(1, 2)
 
@@ -148,11 +168,12 @@ class GatedGPT2Attention(gpt2.GPT2Attention):
             )
 
         bsz, q_len, _, _ = attn_output.size()
-        gate_score = self.gate_proj(hidden_states)
-        if self.headwise_attn_output_gate:
+        if self.gate_type == "headwise":
             gate_score = gate_score.view(bsz, q_len, self.num_heads, 1)
         else:
             gate_score = gate_score.view(bsz, q_len, self.num_heads, self.head_dim)
+        if attn_output.shape[1] == self.num_heads:
+            gate_score = gate_score.permute(0, 2, 1, 3)
         attn_output = attn_output * torch.sigmoid(gate_score)
 
         attn_output = attn_output.reshape(*attn_output.shape[:-2], -1).contiguous()
@@ -178,18 +199,10 @@ def apply_gpt2_gated_attention(model, gate_type="headwise"):
             config=model.config,
             is_cross_attention=False,
             layer_idx=old_attn.layer_idx,
+            gate_type=gate_type,
         )
         gated.load_state_dict(old_attn.state_dict(), strict=False)
+        gated.init_fused_c_attn(old_attn)
         block.attn = gated
-
-        if hasattr(block, "crossattention"):
-            old_cross = block.crossattention
-            gated_cross = GatedGPT2Attention(
-                config=model.config,
-                is_cross_attention=True,
-                layer_idx=old_cross.layer_idx,
-            )
-            gated_cross.load_state_dict(old_cross.state_dict(), strict=False)
-            block.crossattention = gated_cross
 
     return model
