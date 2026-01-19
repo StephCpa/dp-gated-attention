@@ -201,7 +201,10 @@ def apply_gpt2_gated_attention(model, gate_type="headwise"):
             layer_idx=old_attn.layer_idx,
             gate_type=gate_type,
         )
-        gated.load_state_dict(old_attn.state_dict(), strict=False)
+        state = old_attn.state_dict()
+        if gated._fused_gate:
+            state = {k: v for k, v in state.items() if not k.startswith("c_attn.")}
+        gated.load_state_dict(state, strict=False)
         gated.init_fused_c_attn(old_attn)
         block.attn = gated
 
