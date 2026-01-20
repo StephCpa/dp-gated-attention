@@ -279,18 +279,17 @@ def build_model(
 
 
 def build_gpt2_model(args):
-    from transformers import AutoConfig, AutoModelForCausalLM
+    from transformers import AutoModelForCausalLM
     _ensure_gated_attention_package()
     from gated_attention.modeling_gpt2_gated import apply_gpt2_gated_attention
 
     if not args.hf_model:
         raise ValueError("GPT2 mode requires --hf-model pointing to a local or HF model name/path.")
 
-    config = AutoConfig.from_pretrained(args.hf_model)
-    config.headwise_attn_output_gate = args.gate_type == "headwise"
-    config.elementwise_attn_output_gate = args.gate_type == "elementwise"
+    # Load base pretrained model first (without gated attention config)
+    model = AutoModelForCausalLM.from_pretrained(args.hf_model)
 
-    model = AutoModelForCausalLM.from_pretrained(args.hf_model, config=config)
+    # Then apply gated attention transformation (this sets config flags internally)
     model = apply_gpt2_gated_attention(model, gate_type=args.gate_type)
     return model
 
