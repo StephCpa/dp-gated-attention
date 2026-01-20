@@ -3,14 +3,25 @@ Traceback (most recent call last):
     main()
   File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 372, in main
     model = build_gpt2_model(args).to(args.device)
-            ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 294, in build_gpt2_model
-    model = apply_gpt2_gated_attention(model, gate_type=args.gate_type)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/modeling_gpt2_gated.py", line 204, in apply_gpt2_gated_attention
-    gated.load_state_dict(old_attn.state_dict(), strict=False)
-  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 2584, in load_state_dict
-    raise RuntimeError(
-RuntimeError: Error(s) in loading state_dict for GatedGPT2Attention:
-	size mismatch for c_attn.weight: copying a param with shape torch.Size([1280, 3840]) from checkpoint, the shape in current model is torch.Size([1280, 3860]).
-	size mismatch for c_attn.bias: copying a param with shape torch.Size([3840]) from checkpoint, the shape in current model is torch.Size([3860]).
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4343, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1340, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 927, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1326, in convert
+    return t.to(
+           ^^^^^
+RuntimeError: CUDA error: CUDA-capable device(s) is/are busy or unavailable
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
