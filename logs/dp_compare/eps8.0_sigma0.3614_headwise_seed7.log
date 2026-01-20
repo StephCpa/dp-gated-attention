@@ -201,7 +201,7 @@ step=197 loss=4.1282
 step=198 loss=4.5053
 step=199 loss=3.2864
 step=200 loss=3.6265
-eval_step=200 eval_loss=4.0584 eval_ppl=57.88
+eval_step=200 eval_loss=3.8313 eval_ppl=46.12
 step=201 loss=4.7247
 step=202 loss=5.4821
 step=203 loss=3.5439
@@ -402,7 +402,7 @@ step=397 loss=3.3426
 step=398 loss=4.1244
 step=399 loss=6.0269
 step=400 loss=5.4565
-eval_step=400 eval_loss=4.0408 eval_ppl=56.87
+eval_step=400 eval_loss=3.8155 eval_ppl=45.40
 step=401 loss=3.9492
 step=402 loss=4.3497
 step=403 loss=4.6559
@@ -603,7 +603,7 @@ step=597 loss=3.8617
 step=598 loss=3.3904
 step=599 loss=3.3095
 step=600 loss=3.1723
-eval_step=600 eval_loss=4.0235 eval_ppl=55.90
+eval_step=600 eval_loss=3.7992 eval_ppl=44.67
 step=601 loss=3.6611
 step=602 loss=3.6200
 step=603 loss=2.8412
@@ -804,7 +804,7 @@ step=797 loss=5.6792
 step=798 loss=3.8471
 step=799 loss=3.6963
 step=800 loss=3.8061
-eval_step=800 eval_loss=4.0085 eval_ppl=55.06
+eval_step=800 eval_loss=3.7854 eval_ppl=44.05
 step=801 loss=4.4587
 step=802 loss=6.1143
 step=803 loss=4.3698
@@ -1005,7 +1005,7 @@ step=997 loss=3.6509
 step=998 loss=3.9579
 step=999 loss=3.3691
 step=1000 loss=2.8850
-eval_step=1000 eval_loss=3.9917 eval_ppl=54.14
+eval_step=1000 eval_loss=3.7702 eval_ppl=43.39
 step=1001 loss=3.7947
 step=1002 loss=3.7275
 step=1003 loss=3.7079
@@ -1206,7 +1206,7 @@ step=1197 loss=5.8334
 step=1198 loss=4.0318
 step=1199 loss=4.8058
 step=1200 loss=4.0270
-eval_step=1200 eval_loss=3.9757 eval_ppl=53.29
+eval_step=1200 eval_loss=3.7555 eval_ppl=42.75
 step=1201 loss=3.6141
 step=1202 loss=3.5739
 step=1203 loss=4.0672
@@ -1407,7 +1407,7 @@ step=1397 loss=3.9827
 step=1398 loss=5.2115
 step=1399 loss=4.2423
 step=1400 loss=3.5568
-eval_step=1400 eval_loss=3.9590 eval_ppl=52.41
+eval_step=1400 eval_loss=3.7401 eval_ppl=42.10
 step=1401 loss=4.6892
 step=1402 loss=3.3643
 step=1403 loss=3.4784
@@ -1608,7 +1608,7 @@ step=1597 loss=3.2904
 step=1598 loss=5.4209
 step=1599 loss=4.0618
 step=1600 loss=3.1298
-eval_step=1600 eval_loss=3.9430 eval_ppl=51.58
+eval_step=1600 eval_loss=3.7257 eval_ppl=41.50
 step=1601 loss=7.6820
 step=1602 loss=3.6850
 step=1603 loss=2.9447
@@ -1809,7 +1809,7 @@ step=1797 loss=5.3032
 step=1798 loss=4.8134
 step=1799 loss=3.5289
 step=1800 loss=3.9429
-eval_step=1800 eval_loss=3.9270 eval_ppl=50.75
+eval_step=1800 eval_loss=3.7111 eval_ppl=40.90
 step=1801 loss=3.5716
 step=1802 loss=4.1503
 step=1803 loss=3.5763
@@ -2010,7 +2010,7 @@ step=1997 loss=2.8152
 step=1998 loss=5.1317
 step=1999 loss=5.4653
 step=2000 loss=3.7645
-eval_step=2000 eval_loss=3.9121 eval_ppl=50.00
+eval_step=2000 eval_loss=3.6974 eval_ppl=40.34
 step=2001 loss=5.4046
 step=2002 loss=4.0191
 step=2003 loss=3.5589
@@ -2211,7 +2211,7 @@ step=2197 loss=3.0703
 step=2198 loss=3.4705
 step=2199 loss=2.7022
 step=2200 loss=6.7315
-eval_step=2200 eval_loss=3.8983 eval_ppl=49.32
+eval_step=2200 eval_loss=3.6846 eval_ppl=39.83
 step=2201 loss=3.9593
 step=2202 loss=5.3516
 step=2203 loss=3.4812
@@ -2412,7 +2412,7 @@ step=2397 loss=5.6111
 step=2398 loss=4.0175
 step=2399 loss=3.7024
 step=2400 loss=3.6697
-eval_step=2400 eval_loss=3.8814 eval_ppl=48.49
+eval_step=2400 eval_loss=3.6690 eval_ppl=39.21
 step=2401 loss=3.7225
 step=2402 loss=2.2557
 step=2403 loss=3.7914
@@ -2613,7 +2613,7 @@ step=2597 loss=5.2243
 step=2598 loss=4.2154
 step=2599 loss=3.5529
 step=2600 loss=4.3615
-eval_step=2600 eval_loss=3.8661 eval_ppl=47.76
+eval_step=2600 eval_loss=3.6552 eval_ppl=38.67
 step=2601 loss=4.3541
 step=2602 loss=4.0634
 step=2603 loss=2.8922
@@ -2814,7 +2814,7 @@ step=2797 loss=2.9427
 step=2798 loss=4.1917
 step=2799 loss=5.3847
 step=2800 loss=4.4222
-eval_step=2800 eval_loss=3.8499 eval_ppl=46.99
+eval_step=2800 eval_loss=3.6404 eval_ppl=38.11
 step=2801 loss=3.7729
 step=2802 loss=3.6217
 step=2803 loss=6.1684
@@ -3015,7 +3015,7 @@ step=2997 loss=4.5038
 step=2998 loss=3.8534
 step=2999 loss=2.4215
 step=3000 loss=3.8919
-eval_step=3000 eval_loss=3.8330 eval_ppl=46.20
+eval_step=3000 eval_loss=3.6250 eval_ppl=37.52
 step=3001 loss=3.4167
 step=3002 loss=4.3739
 step=3003 loss=3.4167
@@ -3216,7 +3216,7 @@ step=3197 loss=3.6219
 step=3198 loss=7.8872
 step=3199 loss=3.8033
 step=3200 loss=3.6010
-eval_step=3200 eval_loss=3.8176 eval_ppl=45.49
+eval_step=3200 eval_loss=3.6110 eval_ppl=37.00
 step=3201 loss=1.6291
 step=3202 loss=5.3210
 step=3203 loss=5.4403
@@ -3417,7 +3417,7 @@ step=3397 loss=3.9317
 step=3398 loss=3.7319
 step=3399 loss=3.7131
 step=3400 loss=3.7654
-eval_step=3400 eval_loss=3.8014 eval_ppl=44.76
+eval_step=3400 eval_loss=3.5965 eval_ppl=36.47
 step=3401 loss=3.5826
 step=3402 loss=3.6802
 step=3403 loss=3.8006
@@ -3618,7 +3618,7 @@ step=3597 loss=4.0348
 step=3598 loss=2.0084
 step=3599 loss=5.3320
 step=3600 loss=3.6646
-eval_step=3600 eval_loss=3.7872 eval_ppl=44.13
+eval_step=3600 eval_loss=3.5838 eval_ppl=36.01
 step=3601 loss=1.6134
 step=3602 loss=3.0349
 step=3603 loss=3.3582
@@ -3819,7 +3819,7 @@ step=3797 loss=4.1023
 step=3798 loss=4.7739
 step=3799 loss=1.2760
 step=3800 loss=4.3639
-eval_step=3800 eval_loss=3.7719 eval_ppl=43.46
+eval_step=3800 eval_loss=3.5700 eval_ppl=35.52
 step=3801 loss=3.2954
 step=3802 loss=1.6253
 step=3803 loss=3.9057
@@ -4020,7 +4020,7 @@ step=3997 loss=2.4552
 step=3998 loss=3.4489
 step=3999 loss=4.0871
 step=4000 loss=1.3578
-eval_step=4000 eval_loss=3.7562 eval_ppl=42.78
+eval_step=4000 eval_loss=3.5561 eval_ppl=35.03
 step=4001 loss=3.5385
 step=4002 loss=5.8488
 step=4003 loss=4.8163
@@ -4221,7 +4221,7 @@ step=4197 loss=1.1269
 step=4198 loss=4.2102
 step=4199 loss=4.0845
 step=4200 loss=3.5853
-eval_step=4200 eval_loss=3.7425 eval_ppl=42.20
+eval_step=4200 eval_loss=3.5435 eval_ppl=34.59
 step=4201 loss=4.0480
 step=4202 loss=3.6359
 step=4203 loss=3.8668
@@ -4422,7 +4422,7 @@ step=4397 loss=0.6915
 step=4398 loss=3.9079
 step=4399 loss=3.9117
 step=4400 loss=2.9863
-eval_step=4400 eval_loss=3.7303 eval_ppl=41.69
+eval_step=4400 eval_loss=3.5325 eval_ppl=34.21
 step=4401 loss=5.3687
 step=4402 loss=4.0308
 step=4403 loss=3.8105
@@ -4623,7 +4623,7 @@ step=4597 loss=4.4253
 step=4598 loss=4.1831
 step=4599 loss=3.8655
 step=4600 loss=4.8121
-eval_step=4600 eval_loss=3.7202 eval_ppl=41.27
+eval_step=4600 eval_loss=3.5233 eval_ppl=33.90
 step=4601 loss=5.5576
 step=4602 loss=4.8116
 step=4603 loss=4.0930
@@ -4824,7 +4824,7 @@ step=4797 loss=5.5286
 step=4798 loss=4.2088
 step=4799 loss=0.6539
 step=4800 loss=4.0532
-eval_step=4800 eval_loss=3.7108 eval_ppl=40.89
+eval_step=4800 eval_loss=3.5147 eval_ppl=33.61
 step=4801 loss=3.6164
 step=4802 loss=3.6032
 step=4803 loss=3.1884
@@ -5025,7 +5025,7 @@ step=4997 loss=3.9130
 step=4998 loss=0.2709
 step=4999 loss=4.6004
 step=5000 loss=5.5181
-eval_step=5000 eval_loss=3.7034 eval_ppl=40.59
+eval_step=5000 eval_loss=3.5078 eval_ppl=33.37
 step=5001 loss=3.4708
 step=5002 loss=3.9613
 step=5003 loss=4.0628
@@ -5226,7 +5226,7 @@ step=5197 loss=3.7276
 step=5198 loss=0.3991
 step=5199 loss=4.6144
 step=5200 loss=0.9218
-eval_step=5200 eval_loss=3.6970 eval_ppl=40.33
+eval_step=5200 eval_loss=3.5017 eval_ppl=33.17
 step=5201 loss=3.6124
 step=5202 loss=0.8836
 step=5203 loss=0.7290
@@ -5427,7 +5427,7 @@ step=5397 loss=3.7298
 step=5398 loss=4.8028
 step=5399 loss=4.4288
 step=5400 loss=1.1479
-eval_step=5400 eval_loss=3.6924 eval_ppl=40.14
+eval_step=5400 eval_loss=3.4974 eval_ppl=33.03
 step=5401 loss=0.8370
 step=5402 loss=6.0928
 step=5403 loss=3.8688
@@ -5628,7 +5628,7 @@ step=5597 loss=4.9657
 step=5598 loss=4.7045
 step=5599 loss=3.9617
 step=5600 loss=3.9363
-eval_step=5600 eval_loss=3.6876 eval_ppl=39.95
+eval_step=5600 eval_loss=3.4927 eval_ppl=32.87
 step=5601 loss=3.5839
 step=5602 loss=1.6142
 step=5603 loss=5.6089
@@ -5829,7 +5829,7 @@ step=5797 loss=3.0741
 step=5798 loss=3.5621
 step=5799 loss=3.6014
 step=5800 loss=6.1554
-eval_step=5800 eval_loss=3.6836 eval_ppl=39.79
+eval_step=5800 eval_loss=3.4891 eval_ppl=32.76
 step=5801 loss=1.7668
 step=5802 loss=3.7753
 step=5803 loss=3.9749
@@ -6030,7 +6030,7 @@ step=5997 loss=5.8990
 step=5998 loss=3.0775
 step=5999 loss=4.6198
 step=6000 loss=4.2844
-eval_step=6000 eval_loss=3.6801 eval_ppl=39.65
+eval_step=6000 eval_loss=3.4858 eval_ppl=32.65
 step=6001 loss=0.2211
 step=6002 loss=6.3881
 step=6003 loss=4.1426
@@ -6231,7 +6231,7 @@ step=6197 loss=3.8237
 step=6198 loss=6.2826
 step=6199 loss=4.4297
 step=6200 loss=4.3689
-eval_step=6200 eval_loss=3.6781 eval_ppl=39.57
+eval_step=6200 eval_loss=3.4838 eval_ppl=32.58
 step=6201 loss=0.4245
 step=6202 loss=3.5802
 step=6203 loss=0.1268
@@ -6432,7 +6432,7 @@ step=6397 loss=3.3988
 step=6398 loss=0.4817
 step=6399 loss=4.0437
 step=6400 loss=3.7165
-eval_step=6400 eval_loss=3.6751 eval_ppl=39.45
+eval_step=6400 eval_loss=3.4807 eval_ppl=32.48
 step=6401 loss=3.7097
 step=6402 loss=0.2072
 step=6403 loss=3.1214
@@ -6633,7 +6633,7 @@ step=6597 loss=6.5021
 step=6598 loss=4.3588
 step=6599 loss=4.1363
 step=6600 loss=3.3269
-eval_step=6600 eval_loss=3.6731 eval_ppl=39.37
+eval_step=6600 eval_loss=3.4787 eval_ppl=32.42
 step=6601 loss=4.3941
 step=6602 loss=4.1126
 step=6603 loss=0.1373
@@ -6834,7 +6834,7 @@ step=6797 loss=4.0403
 step=6798 loss=4.2667
 step=6799 loss=4.8008
 step=6800 loss=3.3466
-eval_step=6800 eval_loss=3.6702 eval_ppl=39.26
+eval_step=6800 eval_loss=3.4759 eval_ppl=32.33
 step=6801 loss=3.4273
 step=6802 loss=3.5676
 step=6803 loss=0.2583
@@ -7035,7 +7035,7 @@ step=6997 loss=0.0769
 step=6998 loss=3.0633
 step=6999 loss=5.6513
 step=7000 loss=0.2424
-eval_step=7000 eval_loss=3.6665 eval_ppl=39.11
+eval_step=7000 eval_loss=3.4727 eval_ppl=32.22
 step=7001 loss=3.7355
 step=7002 loss=3.5725
 step=7003 loss=5.3480
@@ -7236,7 +7236,7 @@ step=7197 loss=5.5192
 step=7198 loss=6.0833
 step=7199 loss=4.1129
 step=7200 loss=2.7945
-eval_step=7200 eval_loss=3.6637 eval_ppl=39.00
+eval_step=7200 eval_loss=3.4700 eval_ppl=32.14
 step=7201 loss=0.1962
 step=7202 loss=0.1152
 step=7203 loss=0.0649
@@ -7437,7 +7437,7 @@ step=7397 loss=6.2881
 step=7398 loss=3.4677
 step=7399 loss=4.3152
 step=7400 loss=4.5291
-eval_step=7400 eval_loss=3.6607 eval_ppl=38.89
+eval_step=7400 eval_loss=3.4672 eval_ppl=32.05
 step=7401 loss=5.5636
 step=7402 loss=3.9183
 step=7403 loss=0.1859
@@ -7638,7 +7638,7 @@ step=7597 loss=3.9314
 step=7598 loss=4.5545
 step=7599 loss=6.1596
 step=7600 loss=1.1990
-eval_step=7600 eval_loss=3.6575 eval_ppl=38.76
+eval_step=7600 eval_loss=3.4644 eval_ppl=31.96
 step=7601 loss=3.0222
 step=7602 loss=4.0913
 step=7603 loss=3.4453
@@ -7839,7 +7839,7 @@ step=7797 loss=4.3833
 step=7798 loss=4.3768
 step=7799 loss=0.2154
 step=7800 loss=2.8430
-eval_step=7800 eval_loss=3.6538 eval_ppl=38.62
+eval_step=7800 eval_loss=3.4609 eval_ppl=31.84
 step=7801 loss=5.1118
 step=7802 loss=3.5931
 step=7803 loss=3.7502
@@ -8040,7 +8040,7 @@ step=7997 loss=3.5608
 step=7998 loss=4.1146
 step=7999 loss=4.1518
 step=8000 loss=0.1573
-eval_step=8000 eval_loss=3.6507 eval_ppl=38.50
+eval_step=8000 eval_loss=3.4581 eval_ppl=31.76
 step=8001 loss=3.5063
 step=8002 loss=4.2413
 step=8003 loss=4.2832
@@ -8241,7 +8241,7 @@ step=8197 loss=3.5027
 step=8198 loss=0.2231
 step=8199 loss=4.0483
 step=8200 loss=3.5714
-eval_step=8200 eval_loss=3.6474 eval_ppl=38.37
+eval_step=8200 eval_loss=3.4548 eval_ppl=31.65
 step=8201 loss=4.1373
 step=8202 loss=3.4230
 step=8203 loss=0.1117
@@ -8442,7 +8442,7 @@ step=8397 loss=3.9083
 step=8398 loss=3.2894
 step=8399 loss=0.1233
 step=8400 loss=3.9690
-eval_step=8400 eval_loss=3.6447 eval_ppl=38.27
+eval_step=8400 eval_loss=3.4523 eval_ppl=31.57
 step=8401 loss=3.8705
 step=8402 loss=3.8496
 step=8403 loss=6.3531
@@ -8643,7 +8643,7 @@ step=8597 loss=3.1877
 step=8598 loss=0.0613
 step=8599 loss=4.1008
 step=8600 loss=5.8054
-eval_step=8600 eval_loss=3.6418 eval_ppl=38.16
+eval_step=8600 eval_loss=3.4496 eval_ppl=31.49
 step=8601 loss=4.3207
 step=8602 loss=3.6505
 step=8603 loss=5.2486
@@ -8844,7 +8844,7 @@ step=8797 loss=4.4755
 step=8798 loss=3.4119
 step=8799 loss=3.6914
 step=8800 loss=5.4668
-eval_step=8800 eval_loss=3.6391 eval_ppl=38.06
+eval_step=8800 eval_loss=3.4471 eval_ppl=31.41
 step=8801 loss=4.7078
 step=8802 loss=0.7506
 step=8803 loss=0.1057
@@ -9045,7 +9045,7 @@ step=8997 loss=6.0400
 step=8998 loss=3.4839
 step=8999 loss=4.0880
 step=9000 loss=3.1125
-eval_step=9000 eval_loss=3.6362 eval_ppl=37.95
+eval_step=9000 eval_loss=3.4442 eval_ppl=31.32
 step=9001 loss=3.7590
 step=9002 loss=4.1415
 step=9003 loss=3.6183
@@ -9246,7 +9246,7 @@ step=9197 loss=5.0577
 step=9198 loss=0.1099
 step=9199 loss=3.8042
 step=9200 loss=3.2666
-eval_step=9200 eval_loss=3.6344 eval_ppl=37.88
+eval_step=9200 eval_loss=3.4428 eval_ppl=31.27
 step=9201 loss=7.9900
 step=9202 loss=3.3143
 step=9203 loss=3.9402
@@ -9447,7 +9447,7 @@ step=9397 loss=3.6969
 step=9398 loss=3.4507
 step=9399 loss=3.3042
 step=9400 loss=0.0289
-eval_step=9400 eval_loss=3.6307 eval_ppl=37.74
+eval_step=9400 eval_loss=3.4395 eval_ppl=31.17
 step=9401 loss=3.3055
 step=9402 loss=3.4295
 step=9403 loss=3.3527
@@ -9648,7 +9648,7 @@ step=9597 loss=4.5672
 step=9598 loss=3.7024
 step=9599 loss=3.0324
 step=9600 loss=3.8373
-eval_step=9600 eval_loss=3.6283 eval_ppl=37.65
+eval_step=9600 eval_loss=3.4372 eval_ppl=31.10
 step=9601 loss=3.3681
 step=9602 loss=3.7640
 step=9603 loss=3.7263
@@ -9849,7 +9849,7 @@ step=9797 loss=3.2745
 step=9798 loss=5.1634
 step=9799 loss=0.0289
 step=9800 loss=3.4457
-eval_step=9800 eval_loss=3.6260 eval_ppl=37.56
+eval_step=9800 eval_loss=3.4350 eval_ppl=31.03
 step=9801 loss=4.4417
 step=9802 loss=4.4406
 step=9803 loss=3.6997
@@ -10050,5 +10050,5 @@ step=9997 loss=4.0302
 step=9998 loss=3.8702
 step=9999 loss=3.4896
 step=10000 loss=3.8552
-eval_step=10000 eval_loss=3.6228 eval_ppl=37.44
+eval_step=10000 eval_loss=3.4322 eval_ppl=30.94
 epsilon_rdp(opacus)=7.232 delta=1e-05

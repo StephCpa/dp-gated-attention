@@ -1,7 +1,7 @@
 Traceback (most recent call last):
-  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 503, in <module>
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 502, in <module>
     main()
-  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 372, in main
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_sgd_train_minimal.py", line 371, in main
     model = build_gpt2_model(args).to(args.device)
             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4343, in to
@@ -14,14 +14,13 @@ Traceback (most recent call last):
     module._apply(fn)
   File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
     module._apply(fn)
+  File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  [Previous line repeated 2 more times]
   File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 927, in _apply
     param_applied = fn(param)
                     ^^^^^^^^^
   File "/home/wlwuser/hy/conda/envs/dp-gated/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1326, in convert
     return t.to(
            ^^^^^
-RuntimeError: CUDA error: CUDA-capable device(s) is/are busy or unavailable
-CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
-For debugging consider passing CUDA_LAUNCH_BLOCKING=1
-Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
-
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 47.40 GiB of which 13.31 MiB is free. Process 94732 has 45.91 GiB memory in use. Including non-PyTorch memory, this process has 1.45 GiB memory in use. Of the allocated memory 1.16 GiB is allocated by PyTorch, and 36.22 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
