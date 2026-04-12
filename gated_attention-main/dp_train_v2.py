@@ -358,7 +358,11 @@ def main():
 
     model = build_model(args).to(args.device)
 
-    # Fix Opacus compatibility issues (weight tying, unsupported layers)
+    # Convert Conv1D → nn.Linear for Opacus compatibility
+    from modeling_gpt2_gated_dp import convert_conv1d_to_linear
+    model = convert_conv1d_to_linear(model)
+
+    # Fix remaining Opacus issues (weight tying, etc.)
     from opacus.validators import ModuleValidator
     if not ModuleValidator.is_valid(model):
         model = ModuleValidator.fix(model)

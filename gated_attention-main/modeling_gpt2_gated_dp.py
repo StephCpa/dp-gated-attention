@@ -179,6 +179,18 @@ class DPGatedGPT2Attention(gpt2.GPT2Attention):
     # DP training utilities
     # ------------------------------------------------------------------
 
+    def _get_gate_params(self):
+        """Get gate weight and bias, handling both Conv1D and nn.Linear."""
+        q_end, gate_end = self._gate_slice()
+        gate_b = self.c_attn.bias[q_end:gate_end]
+        if isinstance(self.c_attn, Conv1D):
+            # Conv1D weight shape: (in_features, out_features)
+            gate_w = self.c_attn.weight[:, q_end:gate_end]
+        else:
+            # nn.Linear weight shape: (out_features, in_features)
+            gate_w = self.c_attn.weight[q_end:gate_end, :]
+        return gate_w, gate_b
+
     def gate_l1_loss(self) -> torch.Tensor:
         """
         Mean L1 norm of gate parameters (weight slice + bias slice).
@@ -190,9 +202,7 @@ class DPGatedGPT2Attention(gpt2.GPT2Attention):
         if not self._fused_gate:
             return torch.tensor(0.0, device=next(self.parameters()).device)
 
-        q_end, gate_end = self._gate_slice()
-        gate_w = self.c_attn.weight[:, q_end:gate_end]
-        gate_b = self.c_attn.bias[q_end:gate_end]
+        gate_w, gate_b = self._get_gate_params()
         return gate_w.abs().mean() + gate_b.abs().mean()
 
     @torch.no_grad()
@@ -206,12 +216,13 @@ class DPGatedGPT2Attention(gpt2.GPT2Attention):
         """
         if not self._fused_gate:
             return 0.0
-        q_end, gate_end = self._gate_slice()
-        # gate_score = hidden_states @ weight[:, q_end:gate_end] + bias[q_end:gate_end]
-        # Conv1D weight shape: (in, out) — note transposed vs nn.Linear
-        gate_w = self.c_attn.weight[:, q_end:gate_end]  # (embed_dim, gate_dim)
-        gate_b = self.c_attn.bias[q_end:gate_end]        # (gate_dim,)
-        gate_score = hidden_states @ gate_w + gate_b      # (B, L, gate_dim)
+        gate_w, gate_b = self._get_gate_params()
+        if isinstance(self.c_attn, Conv1D):
+            # Conv1D: weight is (in, out), forward does x @ weight
+            gate_score = hidden_states @ gate_w + gate_b
+        else:
+            # nn.Linear: weight is (out, in), need x @ weight.T
+            gate_score = hidden_states @ gate_w.t() + gate_b
         gate_prob = torch.sigmoid(gate_score)
         return (gate_prob < threshold).float().mean().item()
 
@@ -387,6 +398,33 @@ def apply_dp_gated_attention(
         gated.init_fused_c_attn(old_attn)
         block.attn = gated
 
+    return model
+
+
+def convert_conv1d_to_linear(model):
+    """
+    Convert all HuggingFace Conv1D layers to nn.Linear for Opacus compatibility.
+
+    Conv1D stores weight as (in_features, out_features) and does x @ weight + bias.
+    nn.Linear stores weight as (out_features, in_features) and does x @ weight.T + bias.
+    The functional result is identical; only the storage layout differs.
+
+    Must be called AFTER apply_dp_gated_attention() (which uses Conv1D internally
+    for init_fused_c_attn) but BEFORE Opacus make_private().
+    """
+    for name, module in list(model.named_modules()):
+        if isinstance(module, Conv1D):
+            in_features = module.weight.shape[0]
+            out_features = module.weight.shape[1]
+            linear = nn.Linear(in_features, out_features)
+            linear.weight.data = module.weight.data.t().contiguous()
+            linear.bias.data = module.bias.data.clone()
+            # Navigate to parent and replace
+            parts = name.split(".")
+            parent = model
+            for part in parts[:-1]:
+                parent = getattr(parent, part)
+            setattr(parent, parts[-1], linear)
     return model
 
 
