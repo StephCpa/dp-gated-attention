@@ -357,6 +357,12 @@ def main():
         eval_loader = None
 
     model = build_model(args).to(args.device)
+
+    # Fix Opacus compatibility issues (weight tying, unsupported layers)
+    from opacus.validators import ModuleValidator
+    if not ModuleValidator.is_valid(model):
+        model = ModuleValidator.fix(model)
+
     model.train()
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
