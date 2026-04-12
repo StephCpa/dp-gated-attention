@@ -383,7 +383,7 @@ def main():
     p.add_argument("--eval-every", type=int, default=500)
     p.add_argument("--eval-steps", type=int, default=50)
     p.add_argument("--print-every", type=int, default=100)
-    p.add_argument("--grad-sample-mode", default="hooks",
+    p.add_argument("--grad-sample-mode", default="functorch",
                    choices=["hooks", "functorch"])
     p.add_argument("--max-physical-batch-size", type=int, default=0)
     p.add_argument("--poisson-sampling", action="store_true", default=True)

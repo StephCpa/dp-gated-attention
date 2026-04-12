@@ -307,7 +307,7 @@ def main():
     parser.add_argument("--poisson-sampling", action="store_true", default=True)
     parser.add_argument("--no-poisson-sampling",
                         action="store_false", dest="poisson_sampling")
-    parser.add_argument("--grad-sample-mode", default="hooks",
+    parser.add_argument("--grad-sample-mode", default="functorch",
                         choices=["hooks", "functorch"])
     parser.add_argument("--max-physical-batch-size", type=int, default=0)
 
