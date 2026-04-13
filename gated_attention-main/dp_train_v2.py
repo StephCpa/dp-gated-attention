@@ -358,11 +358,20 @@ def main():
 
     model = build_model(args).to(args.device)
 
+    # Untie weights for Opacus compatibility (GPT-2 ties lm_head to wte)
+    if hasattr(model, "lm_head") and hasattr(model, "transformer"):
+        embed_weight = model.transformer.wte.weight
+        if model.lm_head.weight is embed_weight:
+            model.lm_head.weight = torch.nn.Parameter(
+                embed_weight.detach().clone()
+            )
+            model.config.tie_word_embeddings = False
+
     # Convert Conv1D → nn.Linear for Opacus compatibility
     from modeling_gpt2_gated_dp import convert_conv1d_to_linear
     model = convert_conv1d_to_linear(model)
 
-    # Fix remaining Opacus issues (weight tying, etc.)
+    # Fix remaining Opacus issues (unsupported layers, etc.)
     from opacus.validators import ModuleValidator
     if not ModuleValidator.is_valid(model):
         model = ModuleValidator.fix(model)
