@@ -1,0 +1,128 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 7160.07it/s]
+/home/wlwuser/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+step=000100  loss=4.7569  ε=2.291  λ=0.00000
+step=000200  loss=4.6619  ε=2.355  λ=0.00000
+step=000300  loss=4.5534  ε=2.400  λ=0.00000
+step=000400  loss=4.5111  ε=2.428  λ=0.00000
+step=000500  loss=4.5017  ε=2.455  λ=0.00000
+  [eval] step=000500  eval_ppl=64.587  gate_sparsity=0.000  ε_consumed=2.455
+step=000600  loss=4.4719  ε=2.478  λ=0.00000
+step=000700  loss=4.4183  ε=2.494  λ=0.00000
+step=000800  loss=4.5114  ε=2.510  λ=0.00000
+step=000900  loss=4.4678  ε=2.526  λ=0.00000
+step=001000  loss=4.4566  ε=2.542  λ=0.00000
+  [eval] step=001000  eval_ppl=62.294  gate_sparsity=0.000  ε_consumed=2.542
+step=001100  loss=4.4647  ε=2.558  λ=0.00000
+step=001200  loss=4.4067  ε=2.569  λ=0.00000
+step=001300  loss=4.4340  ε=2.578  λ=0.00000
+step=001400  loss=4.4046  ε=2.588  λ=0.00000
+step=001500  loss=4.4255  ε=2.597  λ=0.00000
+  [eval] step=001500  eval_ppl=57.202  gate_sparsity=0.000  ε_consumed=2.597
+step=001600  loss=4.3830  ε=2.607  λ=0.00000
+step=001700  loss=4.3797  ε=2.617  λ=0.00000
+step=001800  loss=4.3523  ε=2.626  λ=0.00000
+step=001900  loss=4.3412  ε=2.636  λ=0.00000
+step=002000  loss=4.3374  ε=2.645  λ=0.00000
+  [eval] step=002000  eval_ppl=53.589  gate_sparsity=0.000  ε_consumed=2.645
+step=002100  loss=4.3644  ε=2.655  λ=0.00000
+step=002200  loss=4.3213  ε=2.664  λ=0.00000
+step=002300  loss=4.3353  ε=2.670  λ=0.00000
+step=002400  loss=4.3093  ε=2.676  λ=0.00000
+step=002500  loss=4.3337  ε=2.682  λ=0.00000
+  [eval] step=002500  eval_ppl=52.223  gate_sparsity=0.000  ε_consumed=2.682
+step=002600  loss=4.3152  ε=2.688  λ=0.00000
+step=002700  loss=4.3355  ε=2.695  λ=0.00000
+step=002800  loss=4.3134  ε=2.701  λ=0.00000
+step=002900  loss=4.2652  ε=2.707  λ=0.00000
+step=003000  loss=4.2885  ε=2.713  λ=0.00000
+  [eval] step=003000  eval_ppl=50.948  gate_sparsity=0.000  ε_consumed=2.713
+step=003100  loss=4.2923  ε=2.719  λ=0.00000
+step=003200  loss=4.2981  ε=2.725  λ=0.00000
+step=003300  loss=4.2547  ε=2.731  λ=0.00000
+step=003400  loss=4.2685  ε=2.738  λ=0.00000
+step=003500  loss=4.2621  ε=2.744  λ=0.00000
+  [eval] step=003500  eval_ppl=49.859  gate_sparsity=0.000  ε_consumed=2.744
+step=003600  loss=4.2805  ε=2.750  λ=0.00000
+step=003700  loss=4.2534  ε=2.756  λ=0.00000
+step=003800  loss=4.2484  ε=2.762  λ=0.00000
+step=003900  loss=4.2285  ε=2.768  λ=0.00000
+step=004000  loss=4.2553  ε=2.774  λ=0.00000
+  [eval] step=004000  eval_ppl=49.061  gate_sparsity=0.000  ε_consumed=2.774
+step=004100  loss=4.2577  ε=2.781  λ=0.00000
+step=004200  loss=4.2265  ε=2.785  λ=0.00000
+step=004300  loss=4.2679  ε=2.789  λ=0.00000
+step=004400  loss=4.2247  ε=2.793  λ=0.00000
+step=004500  loss=4.2429  ε=2.798  λ=0.00000
+  [eval] step=004500  eval_ppl=48.725  gate_sparsity=0.000  ε_consumed=2.798
+step=004600  loss=4.2300  ε=2.802  λ=0.00000
+step=004700  loss=4.1865  ε=2.806  λ=0.00000
+step=004800  loss=4.2558  ε=2.810  λ=0.00000
+step=004900  loss=4.2854  ε=2.814  λ=0.00000
+step=005000  loss=4.2092  ε=2.819  λ=0.00000
+  [eval] step=005000  eval_ppl=48.357  gate_sparsity=0.000  ε_consumed=2.819
+step=005100  loss=4.2128  ε=2.823  λ=0.00000
+step=005200  loss=4.2205  ε=2.827  λ=0.00000
+step=005300  loss=4.2071  ε=2.831  λ=0.00000
+step=005400  loss=4.2155  ε=2.835  λ=0.00000
+step=005500  loss=4.2279  ε=2.840  λ=0.00000
+  [eval] step=005500  eval_ppl=48.258  gate_sparsity=0.000  ε_consumed=2.840
+step=005600  loss=4.2254  ε=2.844  λ=0.00000
+step=005700  loss=4.1819  ε=2.848  λ=0.00000
+step=005800  loss=4.2152  ε=2.852  λ=0.00000
+step=005900  loss=4.2448  ε=2.856  λ=0.00000
+step=006000  loss=4.1935  ε=2.861  λ=0.00000
+  [eval] step=006000  eval_ppl=48.019  gate_sparsity=0.000  ε_consumed=2.861
+step=006100  loss=4.1934  ε=2.865  λ=0.00000
+step=006200  loss=4.2227  ε=2.869  λ=0.00000
+step=006300  loss=4.2360  ε=2.873  λ=0.00000
+step=006400  loss=4.1638  ε=2.877  λ=0.00000
+step=006500  loss=4.2139  ε=2.882  λ=0.00000
+  [eval] step=006500  eval_ppl=47.830  gate_sparsity=0.000  ε_consumed=2.882
+step=006600  loss=4.2030  ε=2.886  λ=0.00000
+step=006700  loss=4.1864  ε=2.890  λ=0.00000
+step=006800  loss=4.1601  ε=2.894  λ=0.00000
+step=006900  loss=4.1755  ε=2.898  λ=0.00000
+step=007000  loss=4.1903  ε=2.903  λ=0.00000
+  [eval] step=007000  eval_ppl=47.760  gate_sparsity=0.000  ε_consumed=2.903
+step=007100  loss=4.1762  ε=2.907  λ=0.00000
+step=007200  loss=4.2081  ε=2.911  λ=0.00000
+step=007300  loss=4.2053  ε=2.915  λ=0.00000
+step=007400  loss=4.1747  ε=2.919  λ=0.00000
+step=007500  loss=4.2032  ε=2.923  λ=0.00000
+  [eval] step=007500  eval_ppl=47.453  gate_sparsity=0.000  ε_consumed=2.923
+step=007600  loss=4.1665  ε=2.926  λ=0.00000
+step=007700  loss=4.2027  ε=2.929  λ=0.00000
+step=007800  loss=4.1949  ε=2.932  λ=0.00000
+step=007900  loss=4.2154  ε=2.935  λ=0.00000
+step=008000  loss=4.1637  ε=2.938  λ=0.00000
+  [eval] step=008000  eval_ppl=47.490  gate_sparsity=0.000  ε_consumed=2.938
+step=008100  loss=4.1755  ε=2.942  λ=0.00000
+step=008200  loss=4.1877  ε=2.945  λ=0.00000
+step=008300  loss=4.1720  ε=2.948  λ=0.00000
+step=008400  loss=4.2208  ε=2.951  λ=0.00000
+step=008500  loss=4.1595  ε=2.954  λ=0.00000
+  [eval] step=008500  eval_ppl=47.147  gate_sparsity=0.000  ε_consumed=2.954
+step=008600  loss=4.1978  ε=2.957  λ=0.00000
+step=008700  loss=4.1841  ε=2.960  λ=0.00000
+step=008800  loss=4.1662  ε=2.963  λ=0.00000
+step=008900  loss=4.1399  ε=2.966  λ=0.00000
+step=009000  loss=4.2016  ε=2.969  λ=0.00000
+  [eval] step=009000  eval_ppl=47.027  gate_sparsity=0.000  ε_consumed=2.969
+step=009100  loss=4.2056  ε=2.972  λ=0.00000
+step=009200  loss=4.1670  ε=2.975  λ=0.00000
+step=009300  loss=4.1600  ε=2.978  λ=0.00000
+step=009400  loss=4.1967  ε=2.982  λ=0.00000
+step=009500  loss=4.1603  ε=2.985  λ=0.00000
+  [eval] step=009500  eval_ppl=47.233  gate_sparsity=0.000  ε_consumed=2.985
+step=009600  loss=4.2059  ε=2.988  λ=0.00000
+step=009700  loss=4.1726  ε=2.991  λ=0.00000
+step=009800  loss=4.1682  ε=2.994  λ=0.00000
+step=009900  loss=4.1828  ε=2.997  λ=0.00000
+step=010000  loss=4.1734  ε=3.000  λ=0.00000
+  [eval] step=010000  eval_ppl=47.037  gate_sparsity=0.000  ε_consumed=3.000
+
+Training complete. ε=2.9999  δ=1e-05
+Metrics written to: results/v2/condition_B_gate_naive_eps3.0_seed123.csv
