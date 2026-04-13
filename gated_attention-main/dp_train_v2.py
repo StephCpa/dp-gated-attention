@@ -118,10 +118,17 @@ def build_dataloader(args, tokenizer, split, batch_size, shuffle, max_samples=0)
 
     def collate(examples):
         ids, labs, masks = zip(*examples)
+        input_ids = torch.stack(ids)
+        bsz, seq_len = input_ids.shape
+        # Expand position_ids to full batch dimension so that wpe.weight
+        # receives per-sample gradients of shape [batch, ...] rather than
+        # [1, ...] (HF's default position_ids is (1, seq_len), broadcast).
+        position_ids = torch.arange(seq_len).unsqueeze(0).expand(bsz, -1)
         batch = {
-            "input_ids": torch.stack(ids),
+            "input_ids": input_ids,
             "labels": torch.stack(labs),
             "attention_mask": torch.stack(masks),
+            "position_ids": position_ids,
         }
         return batch
 
