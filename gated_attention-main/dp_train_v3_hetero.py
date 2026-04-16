@@ -195,26 +195,42 @@ def collect_gate_slices(model):
 
 def hetero_dp_step(
     model, batch, optimizer, *,
-    sigma_b: float, sigma_g: float, clip_norm: float, gate_slices: dict,
+    sigma_b: float, sigma_g: float,
+    clip_norm_body: float, clip_norm_gate: float,
+    gate_slices: dict,
 ):
     """
-    One step of heterogeneous-noise DP-SGD:
+    One step of heterogeneous-noise DP-SGD with PER-GROUP CLIPPING.
+
+    This correctly implements direction B: body and gate are treated as
+    two independent Gaussian mechanisms with separate sensitivities
+    (C_body, C_gate) and noise scales (σ_b, σ_g).
+
       1. Forward + backward (GradSampleModule populates p.grad_sample)
-      2. Per-sample global gradient norm
-      3. Per-sample clipping with norm C
-      4. Aggregate, then add noise:
-         - body params and non-gate slices of c_attn: N(0, σ_b²C²)
-         - gate slice of c_attn: N(0, σ_g²C²)
+      2. Compute per-sample norms SEPARATELY for body and gate partitions
+      3. Clip body partition with C_body, gate partition with C_gate
+      4. Aggregate, add noise:
+         - body params and non-gate slices of c_attn: N(0, σ_b² · C_body²)
+         - gate slice of c_attn:                     N(0, σ_g² · C_gate²)
       5. optimizer.step()
+
+    Privacy analysis: body sensitivity = C_body, gate sensitivity = C_gate.
+    Joint RDP per step (order α) =
+        α/2 · [(C_body/σ_b)² + (C_gate/σ_g)²] · (subsampling factors)
+    which reduces to the standard per-mechanism Opacus accounting if we
+    record noise_multiplier = σ_b for body and σ_g for gate independently
+    (because Opacus normalizes sensitivity to 1 internally).
     """
     outputs = model(**batch, use_cache=False)
     loss = outputs.loss
     loss.backward()
 
     batch_size = batch["input_ids"].size(0)
+    device = loss.device
 
-    # 1. Per-sample global norm
-    per_sample_norm_sq = torch.zeros(batch_size, device=loss.device)
+    # 1. Split per-sample grad norms into body and gate partitions
+    body_norm_sq = torch.zeros(batch_size, device=device)
+    gate_norm_sq = torch.zeros(batch_size, device=device)
     grad_params = []
     for p in model.parameters():
         if not p.requires_grad:
@@ -222,38 +238,72 @@ def hetero_dp_step(
         gs = getattr(p, "grad_sample", None)
         if gs is None:
             continue
-        per_sample_norm_sq += gs.reshape(batch_size, -1).pow(2).sum(dim=1)
         grad_params.append(p)
-    per_sample_norm = per_sample_norm_sq.sqrt()
 
-    # 2. Clip factors  c / max(C, ||g_i||)
-    clip_factors = (clip_norm / (per_sample_norm + 1e-6)).clamp(max=1.0)
+        if id(p) in gate_slices:
+            start, end = gate_slices[id(p)]
+            # Gate partition: slice [start:end] along dim 1 of grad_sample
+            # (grad_sample has batch as dim 0, then the param dimensions)
+            if gs.dim() >= 3:
+                gate_part = gs[:, start:end]
+                body_part = torch.cat([gs[:, :start], gs[:, end:]], dim=1)
+            else:  # 2-D grad_sample: batch + 1 param dim (bias)
+                gate_part = gs[:, start:end]
+                body_part = torch.cat([gs[:, :start], gs[:, end:]], dim=1)
+            gate_norm_sq += gate_part.reshape(batch_size, -1).pow(2).sum(dim=1)
+            body_norm_sq += body_part.reshape(batch_size, -1).pow(2).sum(dim=1)
+        else:
+            body_norm_sq += gs.reshape(batch_size, -1).pow(2).sum(dim=1)
+
+    body_norm = body_norm_sq.sqrt()
+    gate_norm = gate_norm_sq.sqrt()
+
+    # 2. Per-group clip factors
+    body_clip_factor = (clip_norm_body / (body_norm + 1e-6)).clamp(max=1.0)
+    gate_clip_factor = (clip_norm_gate / (gate_norm + 1e-6)).clamp(max=1.0)
 
     # 3. Aggregate + per-slice noise
     for p in grad_params:
         gs = p.grad_sample
-        cf_shape = [batch_size] + [1] * (gs.dim() - 1)
-        clipped = gs * clip_factors.view(*cf_shape)
-        aggregated = clipped.sum(dim=0)
 
         if id(p) in gate_slices:
             start, end = gate_slices[id(p)]
-            # Default noise: σ_b for the whole tensor
-            noise = torch.randn_like(aggregated) * (sigma_b * clip_norm)
-            # Override gate slice with σ_g noise
+            # Apply separate clip factors to body and gate slices
+            body_cf_shape = [batch_size] + [1] * (gs.dim() - 1)
+            gate_cf_shape = [batch_size] + [1] * (gs.dim() - 1)
+            body_cf = body_clip_factor.view(*body_cf_shape)
+            gate_cf = gate_clip_factor.view(*gate_cf_shape)
+
+            # Clone to avoid in-place aliasing issues
+            clipped = gs.clone()
+            # Apply gate_cf to gate rows, body_cf to others
+            clipped[:, start:end] = gs[:, start:end] * gate_cf
+            if start > 0:
+                clipped[:, :start] = gs[:, :start] * body_cf
+            if end < gs.shape[1]:
+                clipped[:, end:] = gs[:, end:] * body_cf
+
+            aggregated = clipped.sum(dim=0)
+
+            # Noise: σ_b · C_body for body rows, σ_g · C_gate for gate rows
+            noise = torch.randn_like(aggregated) * (sigma_b * clip_norm_body)
             if p.dim() >= 2:
                 gate_shape = (end - start,) + tuple(p.shape[1:])
                 gate_noise = torch.randn(
                     *gate_shape, device=p.device, dtype=p.dtype,
-                ) * (sigma_g * clip_norm)
+                ) * (sigma_g * clip_norm_gate)
                 noise[start:end] = gate_noise
-            else:  # bias (1-D)
+            else:
                 gate_noise = torch.randn(
                     end - start, device=p.device, dtype=p.dtype,
-                ) * (sigma_g * clip_norm)
+                ) * (sigma_g * clip_norm_gate)
                 noise[start:end] = gate_noise
         else:
-            noise = torch.randn_like(aggregated) * (sigma_b * clip_norm)
+            # Pure body param
+            cf_shape = [batch_size] + [1] * (gs.dim() - 1)
+            clipped = gs * body_clip_factor.view(*cf_shape)
+            aggregated = clipped.sum(dim=0)
+            noise = torch.randn_like(aggregated) * (sigma_b * clip_norm_body)
 
         p.grad = (aggregated + noise) / batch_size
         p.grad_sample = None
@@ -364,10 +414,11 @@ class MetricsLogger:
                 "step", "train_loss", "eval_loss", "eval_ppl",
                 "gate_sparsity", "eps_consumed_total",
                 "sigma_body", "sigma_gate",
+                "clip_body", "clip_gate",
             ])
 
     def log(self, step, train_loss, eval_loss, eval_ppl, gate_sparsity,
-            eps_consumed_total, sigma_b, sigma_g):
+            eps_consumed_total, sigma_b, sigma_g, clip_b, clip_g):
         with open(self.path, "a", newline="") as f:
             csv.writer(f).writerow([
                 self.condition, self.seed, self.eps_target,
@@ -377,6 +428,7 @@ class MetricsLogger:
                 f"{gate_sparsity:.4f}",
                 f"{eps_consumed_total:.4f}",
                 f"{sigma_b:.4f}", f"{sigma_g:.4f}",
+                f"{clip_b:.4f}", f"{clip_g:.4f}",
             ])
 
 
@@ -410,7 +462,12 @@ def main():
                         help="σ_b applied to body parameters")
     parser.add_argument("--noise-multiplier-gate", type=float, required=True,
                         help="σ_g applied to the gate slice of c_attn")
-    parser.add_argument("--clip-norm", type=float, default=1.0)
+    parser.add_argument("--clip-norm-body", type=float, default=1.0,
+                        help="Per-sample clip norm C_body for body params")
+    parser.add_argument("--clip-norm-gate", type=float, default=None,
+                        help="Per-sample clip norm C_gate for gate slice "
+                             "(default: same as C_body). Set to e.g. 0.25·C_body "
+                             "to exploit the natural σ' ≤ 0.25 sensitivity bound.")
     parser.add_argument("--delta", type=float, default=1e-5)
     parser.add_argument("--eps-target", type=float, default=None)
     parser.add_argument("--sample-rate", type=float, default=None,
@@ -431,6 +488,8 @@ def main():
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
 
     args = parser.parse_args()
+    if args.clip_norm_gate is None:
+        args.clip_norm_gate = args.clip_norm_body
 
     # -----------------------------------------------------------------------
     torch.manual_seed(args.seed)
@@ -509,7 +568,9 @@ def main():
             model, batch, optimizer,
             sigma_b=args.noise_multiplier_body,
             sigma_g=args.noise_multiplier_gate,
-            clip_norm=args.clip_norm, gate_slices=gate_slices,
+            clip_norm_body=args.clip_norm_body,
+            clip_norm_gate=args.clip_norm_gate,
+            gate_slices=gate_slices,
         )
         accountant.step(sample_rate, args.noise_multiplier_body, args.noise_multiplier_gate)
         step += 1
@@ -527,7 +588,9 @@ def main():
                 if args.gate_type != "none" else 0.0
             avg_train = sum(recent_losses[-args.eval_every:]) / min(len(recent_losses), args.eval_every)
             logger.log(step, avg_train, eval_loss, eval_ppl, sparsity,
-                       eps_consumed, args.noise_multiplier_body, args.noise_multiplier_gate)
+                       eps_consumed,
+                       args.noise_multiplier_body, args.noise_multiplier_gate,
+                       args.clip_norm_body, args.clip_norm_gate)
             ppl_str = f"{eval_ppl:.3f}" if eval_ppl is not None else "n/a"
             print(f"  [eval] step={step:06d}  eval_ppl={ppl_str}  "
                   f"sparsity={sparsity:.3f}  ε_total={eps_consumed:.3f}")
