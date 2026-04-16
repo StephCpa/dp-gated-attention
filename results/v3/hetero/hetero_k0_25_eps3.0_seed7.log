@@ -1,0 +1,128 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Dataset size: 36718  Sample rate: 0.000436
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 7980.52it/s]
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+Identified 24 gate slices in c_attn
+step=000100  loss=4.6082  ε_total=2.291
+step=000200  loss=4.5320  ε_total=2.355
+step=000300  loss=4.5020  ε_total=2.399
+step=000400  loss=4.4873  ε_total=2.427
+step=000500  loss=4.4373  ε_total=2.455
+  [eval] step=000500  eval_ppl=64.651  sparsity=0.000  ε_total=2.455
+step=000600  loss=4.4235  ε_total=2.478
+step=000700  loss=4.4173  ε_total=2.494
+step=000800  loss=4.4017  ε_total=2.510
+step=000900  loss=4.4231  ε_total=2.525
+step=001000  loss=4.4319  ε_total=2.541
+  [eval] step=001000  eval_ppl=61.694  sparsity=0.000  ε_total=2.541
+step=001100  loss=4.4489  ε_total=2.557
+step=001200  loss=4.4023  ε_total=2.568
+step=001300  loss=4.3802  ε_total=2.578
+step=001400  loss=4.3821  ε_total=2.587
+step=001500  loss=4.4009  ε_total=2.597
+  [eval] step=001500  eval_ppl=60.565  sparsity=0.000  ε_total=2.597
+step=001600  loss=4.3904  ε_total=2.607
+step=001700  loss=4.3842  ε_total=2.616
+step=001800  loss=4.4054  ε_total=2.626
+step=001900  loss=4.4024  ε_total=2.635
+step=002000  loss=4.4486  ε_total=2.645
+  [eval] step=002000  eval_ppl=60.800  sparsity=0.000  ε_total=2.645
+step=002100  loss=4.4498  ε_total=2.654
+step=002200  loss=4.3966  ε_total=2.664
+step=002300  loss=4.3661  ε_total=2.670
+step=002400  loss=4.3861  ε_total=2.676
+step=002500  loss=4.3911  ε_total=2.682
+  [eval] step=002500  eval_ppl=59.136  sparsity=0.000  ε_total=2.682
+step=002600  loss=4.3906  ε_total=2.688
+step=002700  loss=4.3380  ε_total=2.694
+step=002800  loss=4.3887  ε_total=2.700
+step=002900  loss=4.3368  ε_total=2.706
+step=003000  loss=4.3615  ε_total=2.713
+  [eval] step=003000  eval_ppl=56.963  sparsity=0.000  ε_total=2.713
+step=003100  loss=4.3626  ε_total=2.719
+step=003200  loss=4.3634  ε_total=2.725
+step=003300  loss=4.3781  ε_total=2.731
+step=003400  loss=4.3477  ε_total=2.737
+step=003500  loss=4.3493  ε_total=2.743
+  [eval] step=003500  eval_ppl=56.137  sparsity=0.000  ε_total=2.743
+step=003600  loss=4.3617  ε_total=2.749
+step=003700  loss=4.3355  ε_total=2.755
+step=003800  loss=4.3411  ε_total=2.762
+step=003900  loss=4.3150  ε_total=2.768
+step=004000  loss=4.3573  ε_total=2.774
+  [eval] step=004000  eval_ppl=55.769  sparsity=0.000  ε_total=2.774
+step=004100  loss=4.3404  ε_total=2.780
+step=004200  loss=4.3589  ε_total=2.785
+step=004300  loss=4.3541  ε_total=2.789
+step=004400  loss=4.3569  ε_total=2.793
+step=004500  loss=4.3346  ε_total=2.797
+  [eval] step=004500  eval_ppl=55.530  sparsity=0.000  ε_total=2.797
+step=004600  loss=4.3393  ε_total=2.801
+step=004700  loss=4.3553  ε_total=2.806
+step=004800  loss=4.3403  ε_total=2.810
+step=004900  loss=4.3189  ε_total=2.814
+step=005000  loss=4.3420  ε_total=2.818
+  [eval] step=005000  eval_ppl=55.027  sparsity=0.000  ε_total=2.818
+step=005100  loss=4.3475  ε_total=2.822
+step=005200  loss=4.3377  ε_total=2.827
+step=005300  loss=4.3259  ε_total=2.831
+step=005400  loss=4.3682  ε_total=2.835
+step=005500  loss=4.3486  ε_total=2.839
+  [eval] step=005500  eval_ppl=55.063  sparsity=0.000  ε_total=2.839
+step=005600  loss=4.3261  ε_total=2.843
+step=005700  loss=4.3193  ε_total=2.848
+step=005800  loss=4.3345  ε_total=2.852
+step=005900  loss=4.3271  ε_total=2.856
+step=006000  loss=4.3378  ε_total=2.860
+  [eval] step=006000  eval_ppl=54.909  sparsity=0.000  ε_total=2.860
+step=006100  loss=4.3257  ε_total=2.864
+step=006200  loss=4.3511  ε_total=2.869
+step=006300  loss=4.3400  ε_total=2.873
+step=006400  loss=4.3316  ε_total=2.877
+step=006500  loss=4.3745  ε_total=2.881
+  [eval] step=006500  eval_ppl=55.077  sparsity=0.000  ε_total=2.881
+step=006600  loss=4.3280  ε_total=2.885
+step=006700  loss=4.3498  ε_total=2.890
+step=006800  loss=4.3571  ε_total=2.894
+step=006900  loss=4.3435  ε_total=2.898
+step=007000  loss=4.3868  ε_total=2.902
+  [eval] step=007000  eval_ppl=55.037  sparsity=0.000  ε_total=2.902
+step=007100  loss=4.3154  ε_total=2.906
+step=007200  loss=4.3691  ε_total=2.911
+step=007300  loss=4.3646  ε_total=2.915
+step=007400  loss=4.3390  ε_total=2.919
+step=007500  loss=4.3088  ε_total=2.923
+  [eval] step=007500  eval_ppl=54.978  sparsity=0.000  ε_total=2.923
+step=007600  loss=4.3477  ε_total=2.926
+step=007700  loss=4.3305  ε_total=2.929
+step=007800  loss=4.3122  ε_total=2.932
+step=007900  loss=4.3756  ε_total=2.935
+step=008000  loss=4.3619  ε_total=2.939
+  [eval] step=008000  eval_ppl=55.244  sparsity=0.000  ε_total=2.939
+step=008100  loss=4.3380  ε_total=2.942
+step=008200  loss=4.3223  ε_total=2.945
+step=008300  loss=4.3023  ε_total=2.948
+step=008400  loss=4.3285  ε_total=2.951
+step=008500  loss=4.3764  ε_total=2.954
+  [eval] step=008500  eval_ppl=55.309  sparsity=0.000  ε_total=2.954
+step=008600  loss=4.3399  ε_total=2.957
+step=008700  loss=4.3204  ε_total=2.960
+step=008800  loss=4.3521  ε_total=2.963
+step=008900  loss=4.3376  ε_total=2.966
+step=009000  loss=4.3261  ε_total=2.969
+  [eval] step=009000  eval_ppl=55.318  sparsity=0.000  ε_total=2.969
+step=009100  loss=4.3459  ε_total=2.972
+step=009200  loss=4.3648  ε_total=2.975
+step=009300  loss=4.3509  ε_total=2.978
+step=009400  loss=4.3662  ε_total=2.982
+step=009500  loss=4.3315  ε_total=2.985
+  [eval] step=009500  eval_ppl=55.057  sparsity=0.000  ε_total=2.985
+step=009600  loss=4.3532  ε_total=2.988
+step=009700  loss=4.3405  ε_total=2.991
+step=009800  loss=4.3416  ε_total=2.994
+step=009900  loss=4.3734  ε_total=2.997
+step=010000  loss=4.3429  ε_total=3.000
+  [eval] step=010000  eval_ppl=55.108  sparsity=0.000  ε_total=3.000
+
+Training complete. ε_total=3.0000  δ=1e-05
+Metrics written to: results/v3/hetero/hetero_k0_25_eps3.0_seed7.csv
