@@ -425,6 +425,10 @@ def main():
 
         while step < args.steps:
             batch = next(data_iter)
+            # Guard against empty Poisson batches (Opacus can yield list/None
+            # when a sampling round produces no samples).
+            if not isinstance(batch, dict):
+                continue
             batch = {k: v.to(args.device) for k, v in batch.items()}
             if batch["input_ids"].size(0) == 0:
                 continue
