@@ -1,0 +1,97 @@
+usage: run_experiment_v2.py [-h] [--train-script TRAIN_SCRIPT] --hf-model
+                            HF_MODEL --tokenizer TOKENIZER [--dataset DATASET]
+                            [--dataset-config DATASET_CONFIG]
+                            [--dataset-split DATASET_SPLIT]
+                            [--dataset-len DATASET_LEN] [--seq-len SEQ_LEN]
+                            [--batch-size BATCH_SIZE] [--steps STEPS]
+                            [--clip-norm CLIP_NORM] [--lr LR] [--delta DELTA]
+                            [--eps EPS] [--seeds SEEDS] [--gpus GPUS]
+                            [--eval-every EVAL_EVERY]
+                            [--eval-steps EVAL_STEPS]
+                            [--print-every PRINT_EVERY]
+                            [--grad-sample-mode {hooks,functorch}]
+                            [--max-physical-batch-size MAX_PHYSICAL_BATCH_SIZE]
+                            [--poisson-sampling] [--no-poisson-sampling]
+                            [--results-dir RESULTS_DIR] [--dry-run]
+                            [--summary-only]
+run_experiment_v2.py: error: unrecognized arguments: 7
+============================================================
+DP-Gated Attention v2 — 4-condition ablation
+============================================================
+Conditions: ['A_none', 'B_gate_naive', 'C_gate_dp_init', 'D_gate_dp_init_l1']
+ε targets:  [3.0, 8.0]
+Seeds:      [7, 42, 123]
+Total runs: 24
+
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/scripts/run_experiment_v2.py", line 428, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/scripts/run_experiment_v2.py", line 417, in main
+    runs = build_runs(args)
+           ^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/scripts/run_experiment_v2.py", line 162, in build_runs
+    ds_len = get_dataset_size(args.dataset, args.dataset_config, args.dataset_split)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/scripts/run_experiment_v2.py", line 142, in get_dataset_size
+    return len(load_dataset(dataset, config, split=split))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 2594, in load_dataset
+    builder_instance = load_dataset_builder(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 2266, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 1834, in dataset_module_factory
+    dataset_info = hf_api.dataset_info(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 2958, in dataset_info
+    r = get_session().get(path, headers=headers, timeout=timeout, params=params)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 1066, in get
+    return self.request(
+           ^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 837, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 926, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 954, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 991, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_client.py", line 1027, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpx/_transports/default.py", line 236, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 156, in _connect
+    stream = stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/site-packages/httpcore/_backends/sync.py", line 165, in start_tls
+    sock = ssl_context.wrap_socket(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wlwuser/anaconda3/lib/python3.12/ssl.py", line 1042, in _create
+    self.do_handshake()
+  File "/home/wlwuser/anaconda3/lib/python3.12/ssl.py", line 1320, in do_handshake
+    self._sslobj.do_handshake()
+KeyboardInterrupt
