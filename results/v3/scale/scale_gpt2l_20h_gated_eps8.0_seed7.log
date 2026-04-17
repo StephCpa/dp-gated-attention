@@ -1,0 +1,11 @@
+Loading weights:   0%|          | 0/436 [00:00<?, ?it/s]Loading weights: 100%|██████████| 436/436 [00:00<00:00, 5816.99it/s]
+/home/wlwuser/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 507, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 428, in main
+    batch = {k: v.to(args.device) for k, v in batch.items()}
+                                              ^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'

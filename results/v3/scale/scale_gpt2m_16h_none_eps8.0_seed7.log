@@ -1,0 +1,86 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+04/17/2026 13:23:15:WARNING:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights:  21%|██        | 61/292 [00:00<00:00, 547.70it/s]Loading weights:  40%|███▉      | 116/292 [00:00<00:00, 313.96it/s]Loading weights:  52%|█████▏    | 153/292 [00:00<00:00, 310.78it/s]Loading weights:  64%|██████▍   | 187/292 [00:00<00:00, 292.36it/s]Loading weights:  76%|███████▌  | 221/292 [00:00<00:00, 303.71it/s]Loading weights:  90%|████████▉ | 262/292 [00:00<00:00, 332.45it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 334.82it/s]
+/home/wlwuser/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+step=000100  loss=4.2092  ε=4.778  λ=0.00000
+step=000200  loss=4.1132  ε=5.020  λ=0.00000
+step=000300  loss=3.9778  ε=5.118  λ=0.00000
+step=000400  loss=4.0303  ε=5.222  λ=0.00000
+step=000500  loss=3.9663  ε=5.336  λ=0.00000
+  [eval] step=000500  eval_ppl=38.052  gate_sparsity=0.000  ε_consumed=5.336
+step=000600  loss=3.9616  ε=5.388  λ=0.00000
+step=000700  loss=3.8169  ε=5.441  λ=0.00000
+step=000800  loss=3.8163  ε=5.487  λ=0.00000
+step=000900  loss=3.8260  ε=5.539  λ=0.00000
+step=001000  loss=3.6887  ε=5.589  λ=0.00000
+  [eval] step=001000  eval_ppl=35.091  gate_sparsity=0.000  ε_consumed=5.589
+step=001100  loss=3.7225  ε=5.645  λ=0.00000
+step=001200  loss=3.7871  ε=5.698  λ=0.00000
+step=001300  loss=3.8191  ε=5.736  λ=0.00000
+step=001400  loss=3.6389  ε=5.762  λ=0.00000
+step=001500  loss=3.5497  ε=5.790  λ=0.00000
+  [eval] step=001500  eval_ppl=35.166  gate_sparsity=0.000  ε_consumed=5.790
+step=001600  loss=3.7626  ε=5.817  λ=0.00000
+step=001700  loss=3.7347  ε=5.845  λ=0.00000
+step=001800  loss=3.6566  ε=5.871  λ=0.00000
+step=001900  loss=3.7666  ε=5.897  λ=0.00000
+step=002000  loss=3.6261  ε=5.924  λ=0.00000
+  [eval] step=002000  eval_ppl=35.039  gate_sparsity=0.000  ε_consumed=5.924
+step=002100  loss=3.5932  ε=5.949  λ=0.00000
+step=002200  loss=3.5659  ε=5.980  λ=0.00000
+step=002300  loss=3.6717  ε=6.008  λ=0.00000
+step=002400  loss=3.5841  ε=6.036  λ=0.00000
+step=002500  loss=3.8381  ε=6.067  λ=0.00000
+  [eval] step=002500  eval_ppl=35.084  gate_sparsity=0.000  ε_consumed=6.067
+step=002600  loss=3.6694  ε=6.095  λ=0.00000
+step=002700  loss=3.5663  ε=6.122  λ=0.00000
+step=002800  loss=3.6825  ε=6.150  λ=0.00000
+step=002900  loss=3.7571  ε=6.174  λ=0.00000
+step=003000  loss=3.7122  ε=6.190  λ=0.00000
+  [eval] step=003000  eval_ppl=35.029  gate_sparsity=0.000  ε_consumed=6.190
+step=003100  loss=3.7137  ε=6.206  λ=0.00000
+step=003200  loss=3.7105  ε=6.222  λ=0.00000
+step=003300  loss=3.6061  ε=6.237  λ=0.00000
+step=003400  loss=3.6575  ε=6.252  λ=0.00000
+step=003500  loss=3.5648  ε=6.268  λ=0.00000
+  [eval] step=003500  eval_ppl=34.854  gate_sparsity=0.000  ε_consumed=6.268
+step=003600  loss=3.6455  ε=6.282  λ=0.00000
+step=003700  loss=3.5337  ε=6.298  λ=0.00000
+step=003800  loss=3.5729  ε=6.313  λ=0.00000
+step=003900  loss=3.5204  ε=6.328  λ=0.00000
+step=004000  loss=3.6119  ε=6.342  λ=0.00000
+  [eval] step=004000  eval_ppl=34.733  gate_sparsity=0.000  ε_consumed=6.342
+step=004100  loss=3.6827  ε=6.356  λ=0.00000
+step=004200  loss=3.6851  ε=6.371  λ=0.00000
+step=004300  loss=3.6727  ε=6.387  λ=0.00000
+step=004400  loss=3.5287  ε=6.402  λ=0.00000
+step=004500  loss=3.6322  ε=6.417  λ=0.00000
+  [eval] step=004500  eval_ppl=34.670  gate_sparsity=0.000  ε_consumed=6.417
+step=004600  loss=3.6468  ε=6.434  λ=0.00000
+step=004700  loss=3.6788  ε=6.450  λ=0.00000
+step=004800  loss=3.5301  ε=6.463  λ=0.00000
+step=004900  loss=3.6300  ε=6.481  λ=0.00000
+step=005000  loss=3.6833  ε=6.495  λ=0.00000
+  [eval] step=005000  eval_ppl=34.560  gate_sparsity=0.000  ε_consumed=6.495
+step=005100  loss=3.6067  ε=6.510  λ=0.00000
+step=005200  loss=3.7285  ε=6.525  λ=0.00000
+step=005300  loss=3.5739  ε=6.540  λ=0.00000
+step=005400  loss=3.6765  ε=6.556  λ=0.00000
+step=005500  loss=3.6557  ε=6.572  λ=0.00000
+  [eval] step=005500  eval_ppl=34.665  gate_sparsity=0.000  ε_consumed=6.572
+step=005600  loss=3.6575  ε=6.586  λ=0.00000
+step=005700  loss=3.4091  ε=6.602  λ=0.00000
+step=005800  loss=3.5078  ε=6.617  λ=0.00000
+step=005900  loss=3.6689  ε=6.631  λ=0.00000
+step=006000  loss=3.5744  ε=6.646  λ=0.00000
+  [eval] step=006000  eval_ppl=34.721  gate_sparsity=0.000  ε_consumed=6.646
+step=006100  loss=3.6744  ε=6.663  λ=0.00000
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 507, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 428, in main
+    batch = {k: v.to(args.device) for k, v in batch.items()}
+                                              ^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'

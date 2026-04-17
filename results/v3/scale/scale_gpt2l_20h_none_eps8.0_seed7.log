@@ -1,0 +1,12 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/436 [00:00<?, ?it/s]Loading weights:  14%|█▍        | 61/436 [00:00<00:00, 599.82it/s]Loading weights:  28%|██▊       | 121/436 [00:00<00:00, 455.59it/s]Loading weights:  39%|███▉      | 169/436 [00:00<00:00, 378.21it/s]Loading weights:  48%|████▊     | 209/436 [00:00<00:00, 372.72it/s]Loading weights:  57%|█████▋    | 248/436 [00:00<00:00, 318.15it/s]Loading weights:  65%|██████▌   | 285/436 [00:00<00:00, 317.44it/s]Loading weights:  73%|███████▎  | 318/436 [00:00<00:00, 308.17it/s]Loading weights:  80%|████████  | 350/436 [00:01<00:00, 235.78it/s]Loading weights:  87%|████████▋ | 381/436 [00:01<00:00, 239.59it/s]Loading weights: 100%|██████████| 436/436 [00:01<00:00, 319.52it/s]
+/home/wlwuser/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 507, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 428, in main
+    batch = {k: v.to(args.device) for k, v in batch.items()}
+                                              ^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'
