@@ -1,0 +1,114 @@
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 6202.71it/s]
+/home/wlwuser/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+step=000100  loss=4.2863  ε=4.801  λ=0.00000
+step=000200  loss=4.1784  ε=5.025  λ=0.00000
+step=000300  loss=4.1755  ε=5.134  λ=0.00000
+step=000400  loss=4.1240  ε=5.240  λ=0.00000
+step=000500  loss=4.0686  ε=5.338  λ=0.00000
+  [eval] step=000500  eval_ppl=42.617  gate_sparsity=0.000  ε_consumed=5.338
+step=000600  loss=4.1618  ε=5.391  λ=0.00000
+step=000700  loss=3.8955  ε=5.443  λ=0.00000
+step=000800  loss=3.9321  ε=5.492  λ=0.00000
+step=000900  loss=3.9200  ε=5.544  λ=0.00000
+step=001000  loss=3.8988  ε=5.593  λ=0.00000
+  [eval] step=001000  eval_ppl=38.552  gate_sparsity=0.000  ε_consumed=5.593
+step=001100  loss=3.9512  ε=5.645  λ=0.00000
+step=001200  loss=3.8562  ε=5.697  λ=0.00000
+step=001300  loss=3.9103  ε=5.734  λ=0.00000
+step=001400  loss=3.7450  ε=5.763  λ=0.00000
+step=001500  loss=3.8475  ε=5.788  λ=0.00000
+  [eval] step=001500  eval_ppl=37.044  gate_sparsity=0.000  ε_consumed=5.788
+step=001600  loss=3.8460  ε=5.813  λ=0.00000
+step=001700  loss=3.8040  ε=5.840  λ=0.00000
+step=001800  loss=3.6795  ε=5.868  λ=0.00000
+step=001900  loss=3.7345  ε=5.895  λ=0.00000
+step=002000  loss=3.7305  ε=5.921  λ=0.00000
+  [eval] step=002000  eval_ppl=37.485  gate_sparsity=0.000  ε_consumed=5.921
+step=002100  loss=3.7099  ε=5.949  λ=0.00000
+step=002200  loss=3.7968  ε=5.977  λ=0.00000
+step=002300  loss=3.5753  ε=6.005  λ=0.00000
+step=002400  loss=3.7620  ε=6.032  λ=0.00000
+step=002500  loss=3.8266  ε=6.058  λ=0.00000
+  [eval] step=002500  eval_ppl=37.319  gate_sparsity=0.000  ε_consumed=6.058
+step=002600  loss=3.7654  ε=6.085  λ=0.00000
+step=002700  loss=3.8512  ε=6.113  λ=0.00000
+step=002800  loss=3.6580  ε=6.142  λ=0.00000
+step=002900  loss=3.8835  ε=6.170  λ=0.00000
+step=003000  loss=3.7466  ε=6.188  λ=0.00000
+  [eval] step=003000  eval_ppl=36.916  gate_sparsity=0.000  ε_consumed=6.188
+step=003100  loss=3.8895  ε=6.205  λ=0.00000
+step=003200  loss=3.6694  ε=6.219  λ=0.00000
+step=003300  loss=3.7611  ε=6.234  λ=0.00000
+step=003400  loss=3.6986  ε=6.250  λ=0.00000
+step=003500  loss=3.7508  ε=6.266  λ=0.00000
+  [eval] step=003500  eval_ppl=36.733  gate_sparsity=0.000  ε_consumed=6.266
+step=003600  loss=3.6101  ε=6.282  λ=0.00000
+step=003700  loss=3.7026  ε=6.297  λ=0.00000
+step=003800  loss=3.6344  ε=6.312  λ=0.00000
+step=003900  loss=3.7276  ε=6.328  λ=0.00000
+step=004000  loss=3.5763  ε=6.343  λ=0.00000
+  [eval] step=004000  eval_ppl=36.533  gate_sparsity=0.000  ε_consumed=6.343
+step=004100  loss=3.4393  ε=6.358  λ=0.00000
+step=004200  loss=3.6617  ε=6.374  λ=0.00000
+step=004300  loss=3.4796  ε=6.389  λ=0.00000
+step=004400  loss=3.5727  ε=6.404  λ=0.00000
+step=004500  loss=3.7507  ε=6.418  λ=0.00000
+  [eval] step=004500  eval_ppl=36.448  gate_sparsity=0.000  ε_consumed=6.418
+step=004600  loss=3.6274  ε=6.434  λ=0.00000
+step=004700  loss=3.7098  ε=6.449  λ=0.00000
+step=004800  loss=3.6817  ε=6.464  λ=0.00000
+step=004900  loss=3.6470  ε=6.481  λ=0.00000
+step=005000  loss=3.8358  ε=6.496  λ=0.00000
+  [eval] step=005000  eval_ppl=36.100  gate_sparsity=0.000  ε_consumed=6.496
+step=005100  loss=3.6945  ε=6.511  λ=0.00000
+step=005200  loss=3.7828  ε=6.526  λ=0.00000
+step=005300  loss=3.9029  ε=6.543  λ=0.00000
+step=005400  loss=3.7068  ε=6.558  λ=0.00000
+step=005500  loss=3.6031  ε=6.574  λ=0.00000
+  [eval] step=005500  eval_ppl=35.815  gate_sparsity=0.000  ε_consumed=6.574
+step=005600  loss=3.5706  ε=6.588  λ=0.00000
+step=005700  loss=3.5916  ε=6.604  λ=0.00000
+step=005800  loss=3.6999  ε=6.617  λ=0.00000
+step=005900  loss=3.7187  ε=6.633  λ=0.00000
+step=006000  loss=3.5224  ε=6.647  λ=0.00000
+  [eval] step=006000  eval_ppl=35.827  gate_sparsity=0.000  ε_consumed=6.647
+step=006100  loss=3.7915  ε=6.663  λ=0.00000
+step=006200  loss=3.7051  ε=6.678  λ=0.00000
+step=006300  loss=3.6647  ε=6.694  λ=0.00000
+step=006400  loss=3.5659  ε=6.708  λ=0.00000
+step=006500  loss=3.6713  ε=6.721  λ=0.00000
+  [eval] step=006500  eval_ppl=35.540  gate_sparsity=0.000  ε_consumed=6.721
+step=006600  loss=3.5071  ε=6.730  λ=0.00000
+step=006700  loss=3.7358  ε=6.739  λ=0.00000
+step=006800  loss=3.6584  ε=6.748  λ=0.00000
+step=006900  loss=3.7561  ε=6.758  λ=0.00000
+step=007000  loss=3.6016  ε=6.767  λ=0.00000
+  [eval] step=007000  eval_ppl=35.425  gate_sparsity=0.000  ε_consumed=6.767
+step=007100  loss=3.5809  ε=6.777  λ=0.00000
+step=007200  loss=3.7044  ε=6.785  λ=0.00000
+step=007300  loss=3.7740  ε=6.795  λ=0.00000
+step=007400  loss=3.5744  ε=6.805  λ=0.00000
+step=007500  loss=3.6141  ε=6.814  λ=0.00000
+  [eval] step=007500  eval_ppl=35.584  gate_sparsity=0.000  ε_consumed=6.814
+step=007600  loss=3.5596  ε=6.823  λ=0.00000
+step=007700  loss=3.6888  ε=6.833  λ=0.00000
+step=007800  loss=3.7120  ε=6.843  λ=0.00000
+step=007900  loss=3.5772  ε=6.852  λ=0.00000
+step=008000  loss=3.6013  ε=6.861  λ=0.00000
+  [eval] step=008000  eval_ppl=35.512  gate_sparsity=0.000  ε_consumed=6.861
+step=008100  loss=3.5659  ε=6.871  λ=0.00000
+step=008200  loss=3.5374  ε=6.880  λ=0.00000
+step=008300  loss=3.6453  ε=6.889  λ=0.00000
+step=008400  loss=3.7036  ε=6.899  λ=0.00000
+step=008500  loss=3.6502  ε=6.908  λ=0.00000
+  [eval] step=008500  eval_ppl=35.624  gate_sparsity=0.000  ε_consumed=6.908
+step=008600  loss=3.6364  ε=6.917  λ=0.00000
+Traceback (most recent call last):
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 507, in <module>
+    main()
+  File "/home/wlwuser/LZN/dp-gated-t/gated_attention-main/dp_train_v2.py", line 428, in main
+    batch = {k: v.to(args.device) for k, v in batch.items()}
+                                              ^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'
